@@ -512,6 +512,10 @@ plantsType = [
     "巨大坚果保龄球",  # 315
     "爆炸坚果",  # 316
     "拿铁游戏",  # 317
+    "大嘴玉米蟹",  # 318
+    "寒冰大嘴花",  # 319
+    "寒冰菇射手",  # 320
+    "钉耙",  # 321
 ]
 for _ in range(len(plantsType), 512):
     plantsType.append("占位")
@@ -1996,7 +2000,7 @@ class slot:
 class plantCharacteristic:
     def __init__(self, type):
         self.type = type
-        if PVZ_version < 3.4:
+        if PVZ_version < 3.4 and PVZ_version != 3.11:
             if type < 256:
                 self.addr = 0x007A2010 + type * 0x24
                 self.sun = PVZ_memory.read_int(self.addr)
@@ -2098,6 +2102,12 @@ class plantCharacteristic:
                     self.attackInterval = 0
                 elif PVZ_version == 3.99:
                     self.addr = 0x0088B184 + (type - 512) * 0x4
+                    self.sun = PVZ_memory.read_int(self.addr)
+                    self.cd = 0
+                    self.canAttack = True
+                    self.attackInterval = 0
+                elif PVZ_version == 3.11:
+                    self.addr = 0x0088B1A9 + (type - 512) * 0x4
                     self.sun = PVZ_memory.read_int(self.addr)
                     self.cd = 0
                     self.canAttack = True
@@ -2361,7 +2371,7 @@ class zombieType:
                 self.weight = PVZ_memory.read_uchar(0x008D0529)
             elif type == 118:
                 self.weight = PVZ_memory.read_uchar(0x008D066B)
-        elif PVZ_version == 3.99:
+        elif PVZ_version == 3.99 or PVZ_version == 3.11:
             if type <= 114:
                 self.addr = 0x007A6000 + type * 0x1C
                 self.anime = PVZ_memory.read_int(self.addr + 0x4)

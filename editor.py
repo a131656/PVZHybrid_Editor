@@ -55,7 +55,7 @@ from PIL import Image, ImageTk
 import traceback
 
 Image.CUBIC = Image.BICUBIC
-current_version = "0.66"
+current_version = "0.67"
 version_url = "https://gitee.com/EFrostBlade/PVZHybrid_Editor/raw/main/version.txt"
 main_window = None
 PVZ_data.update_PVZ_memory(1)
@@ -311,6 +311,14 @@ def chooseGame():
                     + "      游戏版本："
                     + str(PVZ_data.PVZ_version)
                 )
+            elif "v3.11" in window_name:
+                PVZ_data.update_PVZ_version(3.1)
+                main_window.title(
+                    "杂交版多功能修改器  "
+                    + str(current_version)
+                    + "      游戏版本："
+                    + str(PVZ_data.PVZ_version)
+                )
             elif "v3.1.5" in window_name:
                 PVZ_data.update_PVZ_version(3.15)
                 main_window.title(
@@ -533,6 +541,14 @@ def chooseGame():
                 )
             elif "v2.6" in win32gui.GetWindowText(hwnd):
                 PVZ_data.update_PVZ_version(2.6)
+                main_window.title(
+                    "杂交版多功能修改器  "
+                    + str(current_version)
+                    + "      游戏版本："
+                    + str(PVZ_data.PVZ_version)
+                )
+            elif "v3.11" in win32gui.GetWindowText(hwnd):
+                PVZ_data.update_PVZ_version(3.11)
                 main_window.title(
                     "杂交版多功能修改器  "
                     + str(current_version)
@@ -798,7 +814,7 @@ def support():
     ).pack(pady=(0, 10))
 
     def open_qq0():
-        webbrowser.open_new(r"https://qm.qq.com/q/NvmebXBF6Y")
+        webbrowser.open_new(r"https://qm.qq.com/q/gaeYqqBD")
 
     qq0_frame = ttk.Frame(support_window)
     qq0_frame.pack()
@@ -807,7 +823,7 @@ def support():
     )
     ttk.Button(
         qq0_frame,
-        text="970286809",
+        text="522376997",
         padding=0,
         bootstyle=(PRIMARY, LINK),
         cursor="hand2",
@@ -1509,7 +1525,7 @@ def mainWindow():
         ).pack(pady=(0, 10))
 
         def open_qq0():
-            webbrowser.open_new(r"https://qm.qq.com/q/NvmebXBF6Y")
+            webbrowser.open_new(r"https://qm.qq.com/q/gaeYqqBD")
 
         qq0_frame = ttk.Frame(update_window)
         qq0_frame.pack()
@@ -1518,7 +1534,7 @@ def mainWindow():
         )
         ttk.Button(
             qq0_frame,
-            text="970286809",
+            text="522376997",
             padding=0,
             bootstyle=(PRIMARY, LINK),
             cursor="hand2",
@@ -1735,6 +1751,14 @@ def mainWindow():
                 )
             elif "v3.0" in win32gui.GetWindowText(hwnd):
                 PVZ_data.update_PVZ_version(3.0)
+                main_window.title(
+                    "杂交版多功能修改器  "
+                    + str(current_version)
+                    + "      游戏版本："
+                    + str(PVZ_data.PVZ_version)
+                )
+            elif "v3.11" in win32gui.GetWindowText(hwnd):
+                PVZ_data.update_PVZ_version(3.11)
                 main_window.title(
                     "杂交版多功能修改器  "
                     + str(current_version)

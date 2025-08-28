@@ -216,7 +216,11 @@ def get_zombie_num():
         zombie_num = 109
     elif PVZ_data.PVZ_version == 3.8:
         zombie_num = 111
-    elif PVZ_data.PVZ_version == 3.9 or PVZ_data.PVZ_version == 3.99:
+    elif (
+        PVZ_data.PVZ_version == 3.9
+        or PVZ_data.PVZ_version == 3.99
+        or PVZ_data.PVZ_version == 3.11
+    ):
         zombie_num = 114
     return zombie_num
 
@@ -271,7 +275,11 @@ def getRandomZombie(hasBoss=False):
         zombieType = random.randint(0, 109)
     elif PVZ_data.PVZ_version == 3.8:
         zombieType = random.randint(0, 111)
-    elif PVZ_data.PVZ_version == 3.9 or PVZ_data.PVZ_version == 3.99:
+    elif (
+        PVZ_data.PVZ_version == 3.9
+        or PVZ_data.PVZ_version == 3.99
+        or PVZ_data.PVZ_version == 3.11
+    ):
         zombieType = random.randint(0, 114)
     if hasBoss is True:
         return zombieType
@@ -328,9 +336,11 @@ def getRandomPlant(isPut=False):
         plantType = random.randint(0, 278)
     elif PVZ_data.PVZ_version == 3.9 or PVZ_data.PVZ_version == 3.99:
         plantType = random.randint(0, 289)
+    elif PVZ_data.PVZ_version == 3.11:
+        plantType = random.randint(0, 292)
     if plantType >= 48:
         plantType = plantType + 27
-    IllegalCards = [241, 249, 279, 291, 294, 305]
+    IllegalCards = [241, 249, 279, 291, 294, 304, 305, 309, 310, 311, 321]
     while plantType in IllegalCards:
         plantType = getRandomPlant(isPut)
     if isPut is False:
@@ -4424,7 +4434,11 @@ def globalSpawModify(f, zombieTypes):
                 6,
             )
             spawisModified()
-    elif PVZ_data.PVZ_version == 3.9 or PVZ_data.PVZ_version == 3.99:
+    elif (
+        PVZ_data.PVZ_version == 3.9
+        or PVZ_data.PVZ_version == 3.99
+        or PVZ_data.PVZ_version == 3.11
+    ):
         if f:
             PVZ_data.PVZ_memory.write_bytes(0x00425855, b"\xeb", 1)
             PVZ_data.PVZ_memory.write_bytes(0x0042584E, b"\x90\x90\x90\x90\x90", 5)
@@ -4700,6 +4714,7 @@ def changeZombieHead(f, zombieType):
         or PVZ_data.PVZ_version == 3.8
         or PVZ_data.PVZ_version == 3.9
         or PVZ_data.PVZ_version == 3.99
+        or PVZ_data.PVZ_version == 3.11
     ):
         if f:
             newmem_changeZombieHead = pymem.memory.allocate_memory(
@@ -7972,6 +7987,7 @@ def setBossHP(no, hp):
         or PVZ_data.PVZ_version == 3.8
         or PVZ_data.PVZ_version == 3.9
         or PVZ_data.PVZ_version == 3.99
+        or PVZ_data.PVZ_version == 3.11
     ):
         if no == 1:
             PVZ_data.PVZ_memory.write_int(0x008D0F7F, hp)
@@ -8018,6 +8034,7 @@ def more_hero(f):
         or PVZ_data.PVZ_version == 3.8
         or PVZ_data.PVZ_version == 3.9
         or PVZ_data.PVZ_version == 3.99
+        or PVZ_data.PVZ_version == 3.11
     ):
         if f:
             newmem_more_hero = pymem.memory.allocate_memory(
