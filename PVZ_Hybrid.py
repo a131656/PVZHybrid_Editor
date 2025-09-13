@@ -220,6 +220,7 @@ def get_zombie_num():
         PVZ_data.PVZ_version == 3.9
         or PVZ_data.PVZ_version == 3.99
         or PVZ_data.PVZ_version == 3.11
+        or PVZ_data.PVZ_version == 3.12
     ):
         zombie_num = 114
     return zombie_num
@@ -279,6 +280,7 @@ def getRandomZombie(hasBoss=False):
         PVZ_data.PVZ_version == 3.9
         or PVZ_data.PVZ_version == 3.99
         or PVZ_data.PVZ_version == 3.11
+        or PVZ_data.PVZ_version == 3.12
     ):
         zombieType = random.randint(0, 114)
     if hasBoss is True:
@@ -338,6 +340,8 @@ def getRandomPlant(isPut=False):
         plantType = random.randint(0, 289)
     elif PVZ_data.PVZ_version == 3.11:
         plantType = random.randint(0, 292)
+    elif PVZ_data.PVZ_version == 3.12:
+        plantType = random.randint(0, 294)
     if plantType >= 48:
         plantType = plantType + 27
     IllegalCards = [241, 249, 279, 291, 294, 304, 305, 309, 310, 311, 321]
@@ -4438,6 +4442,7 @@ def globalSpawModify(f, zombieTypes):
         PVZ_data.PVZ_version == 3.9
         or PVZ_data.PVZ_version == 3.99
         or PVZ_data.PVZ_version == 3.11
+        or PVZ_data.PVZ_version == 3.12
     ):
         if f:
             PVZ_data.PVZ_memory.write_bytes(0x00425855, b"\xeb", 1)
@@ -4715,6 +4720,7 @@ def changeZombieHead(f, zombieType):
         or PVZ_data.PVZ_version == 3.9
         or PVZ_data.PVZ_version == 3.99
         or PVZ_data.PVZ_version == 3.11
+        or PVZ_data.PVZ_version == 3.12
     ):
         if f:
             newmem_changeZombieHead = pymem.memory.allocate_memory(
@@ -7988,6 +7994,7 @@ def setBossHP(no, hp):
         or PVZ_data.PVZ_version == 3.9
         or PVZ_data.PVZ_version == 3.99
         or PVZ_data.PVZ_version == 3.11
+        or PVZ_data.PVZ_version == 3.12
     ):
         if no == 1:
             PVZ_data.PVZ_memory.write_int(0x008D0F7F, hp)
@@ -8035,6 +8042,7 @@ def more_hero(f):
         or PVZ_data.PVZ_version == 3.9
         or PVZ_data.PVZ_version == 3.99
         or PVZ_data.PVZ_version == 3.11
+        or PVZ_data.PVZ_version == 3.12
     ):
         if f:
             newmem_more_hero = pymem.memory.allocate_memory(

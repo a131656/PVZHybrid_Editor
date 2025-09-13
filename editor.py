@@ -55,7 +55,7 @@ from PIL import Image, ImageTk
 import traceback
 
 Image.CUBIC = Image.BICUBIC
-current_version = "0.67"
+current_version = "0.68"
 version_url = "https://gitee.com/EFrostBlade/PVZHybrid_Editor/raw/main/version.txt"
 main_window = None
 PVZ_data.update_PVZ_memory(1)
@@ -311,8 +311,16 @@ def chooseGame():
                     + "      游戏版本："
                     + str(PVZ_data.PVZ_version)
                 )
+            elif "v3.12" in window_name:
+                PVZ_data.update_PVZ_version(3.12)
+                main_window.title(
+                    "杂交版多功能修改器  "
+                    + str(current_version)
+                    + "      游戏版本："
+                    + str(PVZ_data.PVZ_version)
+                )
             elif "v3.11" in window_name:
-                PVZ_data.update_PVZ_version(3.1)
+                PVZ_data.update_PVZ_version(3.11)
                 main_window.title(
                     "杂交版多功能修改器  "
                     + str(current_version)
@@ -541,6 +549,14 @@ def chooseGame():
                 )
             elif "v2.6" in win32gui.GetWindowText(hwnd):
                 PVZ_data.update_PVZ_version(2.6)
+                main_window.title(
+                    "杂交版多功能修改器  "
+                    + str(current_version)
+                    + "      游戏版本："
+                    + str(PVZ_data.PVZ_version)
+                )
+            elif "v3.12" in win32gui.GetWindowText(hwnd):
+                PVZ_data.update_PVZ_version(3.12)
                 main_window.title(
                     "杂交版多功能修改器  "
                     + str(current_version)
@@ -1751,6 +1767,14 @@ def mainWindow():
                 )
             elif "v3.0" in win32gui.GetWindowText(hwnd):
                 PVZ_data.update_PVZ_version(3.0)
+                main_window.title(
+                    "杂交版多功能修改器  "
+                    + str(current_version)
+                    + "      游戏版本："
+                    + str(PVZ_data.PVZ_version)
+                )
+            elif "v3.12" in win32gui.GetWindowText(hwnd):
+                PVZ_data.update_PVZ_version(3.12)
                 main_window.title(
                     "杂交版多功能修改器  "
                     + str(current_version)
