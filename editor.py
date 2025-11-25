@@ -55,7 +55,7 @@ from PIL import Image, ImageTk
 import traceback
 
 Image.CUBIC = Image.BICUBIC
-current_version = "0.68"
+current_version = "0.69"
 version_url = "https://gitee.com/EFrostBlade/PVZHybrid_Editor/raw/main/version.txt"
 main_window = None
 PVZ_data.update_PVZ_memory(1)
@@ -311,6 +311,14 @@ def chooseGame():
                     + "      游戏版本："
                     + str(PVZ_data.PVZ_version)
                 )
+            elif "v3.13.2" in window_name:
+                PVZ_data.update_PVZ_version(3.132)
+                main_window.title(
+                    "杂交版多功能修改器  "
+                    + str(current_version)
+                    + "      游戏版本："
+                    + str(PVZ_data.PVZ_version)
+                )
             elif "v3.12" in window_name:
                 PVZ_data.update_PVZ_version(3.12)
                 main_window.title(
@@ -549,6 +557,14 @@ def chooseGame():
                 )
             elif "v2.6" in win32gui.GetWindowText(hwnd):
                 PVZ_data.update_PVZ_version(2.6)
+                main_window.title(
+                    "杂交版多功能修改器  "
+                    + str(current_version)
+                    + "      游戏版本："
+                    + str(PVZ_data.PVZ_version)
+                )
+            elif "v3.13.2" in win32gui.GetWindowText(hwnd):
+                PVZ_data.update_PVZ_version(3.132)
                 main_window.title(
                     "杂交版多功能修改器  "
                     + str(current_version)
@@ -1773,6 +1789,14 @@ def mainWindow():
                     + "      游戏版本："
                     + str(PVZ_data.PVZ_version)
                 )
+            elif "v3.13.2" in win32gui.GetWindowText(hwnd):
+                PVZ_data.update_PVZ_version(3.132)
+                main_window.title(
+                    "杂交版多功能修改器  "
+                    + str(current_version)
+                    + "      游戏版本："
+                    + str(PVZ_data.PVZ_version)
+                )
             elif "v3.12" in win32gui.GetWindowText(hwnd):
                 PVZ_data.update_PVZ_version(3.12)
                 main_window.title(
@@ -2665,6 +2689,10 @@ def mainWindow():
             pvz.completeStore(i)
         for i in range(0, 128):
             pvz.completePeak(i)
+        for i in range(0, 128):
+            pvz.completeSkin(i)
+        for i in range(0, 128):
+            pvz.completeTS(i)
 
     miniGame_complete_button = ttk.Button(
         game_save_frame,
@@ -2687,6 +2715,12 @@ def mainWindow():
             pvz.lockHero(i)
         for i in range(0, 128):
             pvz.lockStore(i)
+        for i in range(0, 128):
+            pvz.lockPeak(i)
+        for i in range(0, 128):
+            pvz.lockSkin(i)
+        for i in range(0, 128):
+            pvz.lockTS(i)
 
     miniGame_lock_button = ttk.Button(
         game_save_frame,
@@ -3852,11 +3886,13 @@ def mainWindow():
         global zombie_select
         if zombie_select is not None:
             try:
-                zombie_type_value.set(
-                    str(zombie_select.type)
-                    + ":"
-                    + PVZ_data.zombiesType[zombie_select.type]
-                )
+                # 检查type是否在zombiesType范围内
+                if zombie_select.type < len(PVZ_data.zombiesType):
+                    zombie_name = PVZ_data.zombiesType[zombie_select.type]
+                else:
+                    zombie_name = "未知"
+
+                zombie_type_value.set(str(zombie_select.type) + ":" + zombie_name)
                 if zombie_attribute_frame.focus_get() != zombie_state_entry:
                     zombie_state_value.set(zombie_select.state)
                 if zombie_attribute_frame.focus_get() != zombie_size_entry:
@@ -4833,11 +4869,13 @@ def mainWindow():
         global plant_select
         if plant_select is not None:
             try:
-                plant_type_value.set(
-                    str(plant_select.type)
-                    + ":"
-                    + PVZ_data.plantsType[plant_select.type]
-                )
+                # 检查type是否在plantsType范围内
+                if plant_select.type < len(PVZ_data.plantsType):
+                    plant_name = PVZ_data.plantsType[plant_select.type]
+                else:
+                    plant_name = "未知"
+
+                plant_type_value.set(str(plant_select.type) + ":" + plant_name)
                 if plant_attribute_frame.focus_get() != plant_state_entry:
                     plant_state_value.set(plant_select.state)
                 if plant_attribute_frame.focus_get() != plant_x_entry:
@@ -8049,12 +8087,23 @@ def mainWindow():
             potted_list.append(PVZ_data.potted(potted_addresss))
             i = i + 1
         n = 0
-        for k in range(potted_num):
+        # 使用potted_list的实际长度，而不是potted_num
+        for k in range(len(potted_list)):
+            # 检查type是否在合理范围内（植物类型应该是非负整数且小于plantsType长度）
+            try:
+                plant_type = potted_list[k].type
+                if plant_type >= 0 and plant_type < len(PVZ_data.plantsType):
+                    plant_name = PVZ_data.plantsType[plant_type]
+                else:
+                    plant_name = "未知"
+            except (IndexError, AttributeError, TypeError):
+                plant_name = "错误"
+
             potted_list_box.insert(
                 "",
                 END,
                 iid=n,
-                text=f"{potted_list[k].no}:{PVZ_data.plantsType[potted_list[k].type]}",
+                text=f"{potted_list[k].no}:{plant_name}",
             )
             if potted_select is not None:
                 if potted_select.no == potted_list[k].no:

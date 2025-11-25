@@ -223,6 +223,8 @@ def get_zombie_num():
         or PVZ_data.PVZ_version == 3.12
     ):
         zombie_num = 114
+    elif PVZ_data.PVZ_version == 3.132:
+        zombie_num = 117
     return zombie_num
 
 
@@ -283,6 +285,8 @@ def getRandomZombie(hasBoss=False):
         or PVZ_data.PVZ_version == 3.12
     ):
         zombieType = random.randint(0, 114)
+    elif PVZ_data.PVZ_version == 3.132:
+        zombieType = random.randint(0, 117)
     if hasBoss is True:
         return zombieType
     else:
@@ -342,6 +346,8 @@ def getRandomPlant(isPut=False):
         plantType = random.randint(0, 292)
     elif PVZ_data.PVZ_version == 3.12:
         plantType = random.randint(0, 294)
+    elif PVZ_data.PVZ_version == 3.132:
+        plantType = random.randint(0, 304)
     if plantType >= 48:
         plantType = plantType + 27
     IllegalCards = [241, 249, 279, 291, 294, 304, 305, 309, 310, 311, 321]
@@ -1123,6 +1129,46 @@ def lockPeak(level):
         + 0x2C2C
     )
     PVZ_data.PVZ_memory.write_int(peakAddr + level * 4, 0)
+
+
+def completeSkin(level):
+    skinAddr = (
+        PVZ_data.PVZ_memory.read_int(
+            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x82C
+        )
+        + 0x302C
+    )
+    PVZ_data.PVZ_memory.write_int(skinAddr + level * 4, 1)
+
+
+def lockSkin(level):
+    skinAddr = (
+        PVZ_data.PVZ_memory.read_int(
+            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x82C
+        )
+        + 0x302C
+    )
+    PVZ_data.PVZ_memory.write_int(skinAddr + level * 4, 0)
+
+
+def completeTS(level):
+    tsAddr = (
+        PVZ_data.PVZ_memory.read_int(
+            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x82C
+        )
+        + 0x34AC
+    )
+    PVZ_data.PVZ_memory.write_int(tsAddr + level * 4, 1)
+
+
+def lockTS(level):
+    tsAddr = (
+        PVZ_data.PVZ_memory.read_int(
+            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x82C
+        )
+        + 0x34AC
+    )
+    PVZ_data.PVZ_memory.write_int(tsAddr + level * 4, 0)
 
 
 def achevement():
@@ -4471,10 +4517,38 @@ def globalSpawModify(f, zombieTypes):
                 6,
             )
             spawisModified()
+    elif PVZ_data.PVZ_version == 3.132:
+        if f:
+            PVZ_data.PVZ_memory.write_bytes(0x00425855, b"\xeb", 1)
+            PVZ_data.PVZ_memory.write_bytes(0x0042584E, b"\x90\x90\x90\x90\x90", 5)
+            newmem_globalSpawModify = pymem.memory.allocate_memory(
+                PVZ_data.PVZ_memory.process_handle, 256
+            )
+            shellcode = asm.Asm(newmem_globalSpawModify)
+            for i in range(0, 117):
+                if str(i) in zombieTypes:
+                    print(i)
+                    shellcode.mov_byte_ptr_exx_add_dword_byte(asm.EDX, 0x57D4 + i, 1)
+                else:
+                    shellcode.mov_byte_ptr_exx_add_dword_byte(asm.EDX, 0x57D4 + i, 0)
+            shellcode.jmp(0x00425D1D)
+            PVZ_data.PVZ_memory.write_bytes(
+                newmem_globalSpawModify,
+                bytes(shellcode.code[: shellcode.index]),
+                shellcode.index,
+            )
+            PVZ_data.PVZ_memory.write_bytes(
+                0x008240BB,
+                b"\xe9"
+                + calculate_call_address(newmem_globalSpawModify - 0x008240C0)
+                + b"\x90",
+                6,
+            )
+            spawisModified()
         else:
             PVZ_data.PVZ_memory.write_bytes(0x00425855, b"\x7f", 1)
             PVZ_data.PVZ_memory.write_bytes(0x0042584E, b"\xe9\xad\xaa\x48\x00", 5)
-            PVZ_data.PVZ_memory.write_bytes(0x0082405A, b"\x0f\x85\xc0\x00\x00\x00", 6)
+            PVZ_data.PVZ_memory.write_bytes(0x008240BB, b"\x0f\x85\x0c\x00\x00\x00", 6)
             pymem.memory.free_memory(
                 PVZ_data.PVZ_memory.process_handle, newmem_globalSpawModify
             )
@@ -4721,6 +4795,7 @@ def changeZombieHead(f, zombieType):
         or PVZ_data.PVZ_version == 3.99
         or PVZ_data.PVZ_version == 3.11
         or PVZ_data.PVZ_version == 3.12
+        or PVZ_data.PVZ_version == 3.132
     ):
         if f:
             newmem_changeZombieHead = pymem.memory.allocate_memory(
@@ -7052,7 +7127,12 @@ def overPlant(f):
         # data.PVZ_memory.write_bytes(0x0084A3EB, b"\xe9\x6a\x3f\xbc\xff\x90", 6)
         PVZ_data.PVZ_memory.write_bytes(0x00410BA2, b"\xeb\x06", 2)
         PVZ_data.PVZ_memory.write_bytes(0x00410967, b"\xeb\x39", 2)
-        if PVZ_data.PVZ_version < 3.4:
+        if (
+            PVZ_data.PVZ_version < 3.4
+            and PVZ_data.PVZ_version != 3.11
+            and PVZ_data.PVZ_version != 3.12
+            and PVZ_data.PVZ_version != 3.132
+        ):
             PVZ_data.PVZ_memory.write_bytes(0x004109A5, b"\xeb\x2d", 2)
     else:
         PVZ_data.PVZ_memory.write_bytes(0x00425634, b"\x83\xf8\xff\x74\x18", 5)
@@ -7087,7 +7167,12 @@ def overPlant(f):
         # data.PVZ_memory.write_bytes(0x0084A3EB, b"\x0f\x85\x69\x3f\xbc\xff", 6)
         PVZ_data.PVZ_memory.write_bytes(0x00410BA2, b"\x75\x06", 2)
         PVZ_data.PVZ_memory.write_bytes(0x00410967, b"\x75\x39", 2)
-        if PVZ_data.PVZ_version < 3.4:
+        if (
+            PVZ_data.PVZ_version < 3.4
+            and PVZ_data.PVZ_version != 3.11
+            and PVZ_data.PVZ_version != 3.12
+            and PVZ_data.PVZ_version != 3.132
+        ):
             PVZ_data.PVZ_memory.write_bytes(0x004109A5, b"\x75\x2d", 2)
 
 
@@ -8002,6 +8087,13 @@ def setBossHP(no, hp):
             PVZ_data.PVZ_memory.write_int(0x008D29FB, hp)
         elif no == 3:
             PVZ_data.PVZ_memory.write_int(0x008D2A19, hp)
+    elif PVZ_data.PVZ_version == 3.132:
+        if no == 1:
+            PVZ_data.PVZ_memory.write_int(0x008D0F83, hp)
+        elif no == 2:
+            PVZ_data.PVZ_memory.write_int(0x008D2A25, hp)
+        elif no == 3:
+            PVZ_data.PVZ_memory.write_int(0x008D2A43, hp)
 
 
 newmem_more_hero = None
@@ -8043,6 +8135,7 @@ def more_hero(f):
         or PVZ_data.PVZ_version == 3.99
         or PVZ_data.PVZ_version == 3.11
         or PVZ_data.PVZ_version == 3.12
+        or PVZ_data.PVZ_version == 3.132
     ):
         if f:
             newmem_more_hero = pymem.memory.allocate_memory(
