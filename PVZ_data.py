@@ -153,6 +153,14 @@ zombiesType = [
     "礼盒伽刚特尔",  # 115
     "礼盒小鬼僵尸",  # 116
     "抽奖盒子僵尸",  # 117
+    "骷髅伽刚特尔",  # 118
+    "骷髅小鬼僵尸",  # 119
+    "园艺车僵尸",  # 120
+    "巨人号飞艇",  # 121
+    "气球小鬼僵尸",  # 122
+    "狂野冰车巨人僵尸",  # 123
+    "狂野伽刚特尔",  # 124
+    "高冰果小鬼僵尸",  # 125
 ]
 zombieSpaw = zombiesType + [
     "绿帽概率",
@@ -531,6 +539,16 @@ plantsType = [
     "毁灭地雷",  # 331
     "魅惑地刺",  # 332
     "土豆三线射手",  # 333
+    "三叶向日葵",  # 334
+    "西瓜棚",  # 335
+    "爱心守护皮肤",  # 336
+    "糖果拼盘皮肤",  # 337
+    "水盆",  # 338
+    "阳光火炬树桩",  # 339
+    "窝瓜壳",  # 340
+    "路灯毁灭菇",  # 341
+    "路灯毁灭菇照明",  # 342
+    "路灯毁灭菇光环",  # 343
 ]
 if isinstance(PVZ_version, (int, float)) and PVZ_version < 3.4:
     for _ in range(len(plantsType), 256):
@@ -657,6 +675,14 @@ plantsType = plantsType + [
     "礼盒伽刚特尔",  # 627
     "礼盒小鬼僵尸",  # 628
     "抽奖盒子僵尸",  # 629
+    "骷髅伽刚特尔",  # 630
+    "骷髅小鬼僵尸",  # 631
+    "园艺车僵尸",  # 632
+    "巨人号飞艇",  # 633
+    "气球小鬼僵尸",  # 634
+    "狂野冰车巨人僵尸",  # 635
+    "狂野伽刚特尔",  # 636
+    "高冰果小鬼僵尸",  # 637
 ]
 
 ExcludedPutCards = [
@@ -1346,6 +1372,7 @@ bulletType = [
     "黄金豌豆3",  # 122
     "火焰黄金豌豆",  # 123
     "冰焰黄金豌豆",  # 124
+    "阳光火球",  # 125
 ]
 keyTpye = [
     "无",
@@ -2046,6 +2073,7 @@ class plantCharacteristic:
             and PVZ_version != 3.11
             and PVZ_version != 3.12
             and PVZ_version != 3.132
+            and PVZ_version != 3.14
         ):
             if type < 256:
                 self.addr = 0x007A2010 + type * 0x24
@@ -2152,7 +2180,12 @@ class plantCharacteristic:
                     self.cd = 0
                     self.canAttack = True
                     self.attackInterval = 0
-                elif PVZ_version == 3.11 or PVZ_version == 3.12 or PVZ_version == 3.132:
+                elif (
+                    PVZ_version == 3.11
+                    or PVZ_version == 3.12
+                    or PVZ_version == 3.132
+                    or PVZ_version == 3.14
+                ):
                     self.addr = 0x0088B1A9 + (type - 512) * 0x4
                     self.sun = PVZ_memory.read_int(self.addr)
                     self.cd = 0
@@ -2444,6 +2477,20 @@ class zombieType:
             elif type == 120:
                 self.weight = PVZ_memory.read_uchar(0x008D0529)
             elif type == 121:
+                self.weight = PVZ_memory.read_uchar(0x008D066B)
+        elif PVZ_version == 3.14:
+            if type <= 125:
+                self.addr = 0x007A6000 + type * 0x1C
+                self.anime = PVZ_memory.read_int(self.addr + 0x4)
+                self.level = PVZ_memory.read_int(self.addr + 0x8)
+                self.weight = PVZ_memory.read_int(self.addr + 0x14)
+            elif type == 126:
+                self.weight = PVZ_memory.read_uchar(0x008D0928)
+            elif type == 127:
+                self.weight = PVZ_memory.read_uchar(0x008D07C4)
+            elif type == 128:
+                self.weight = PVZ_memory.read_uchar(0x008D0529)
+            elif type == 129:
                 self.weight = PVZ_memory.read_uchar(0x008D066B)
 
     def setAnime(self, anime):

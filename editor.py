@@ -55,7 +55,7 @@ from PIL import Image, ImageTk
 import traceback
 
 Image.CUBIC = Image.BICUBIC
-current_version = "0.69"
+current_version = "0.70"
 version_url = "https://gitee.com/EFrostBlade/PVZHybrid_Editor/raw/main/version.txt"
 main_window = None
 PVZ_data.update_PVZ_memory(1)
@@ -311,6 +311,14 @@ def chooseGame():
                     + "      游戏版本："
                     + str(PVZ_data.PVZ_version)
                 )
+            elif "v3.14" in window_name:
+                PVZ_data.update_PVZ_version(3.14)
+                main_window.title(
+                    "杂交版多功能修改器  "
+                    + str(current_version)
+                    + "      游戏版本："
+                    + str(PVZ_data.PVZ_version)
+                )
             elif "v3.13.2" in window_name:
                 PVZ_data.update_PVZ_version(3.132)
                 main_window.title(
@@ -557,6 +565,14 @@ def chooseGame():
                 )
             elif "v2.6" in win32gui.GetWindowText(hwnd):
                 PVZ_data.update_PVZ_version(2.6)
+                main_window.title(
+                    "杂交版多功能修改器  "
+                    + str(current_version)
+                    + "      游戏版本："
+                    + str(PVZ_data.PVZ_version)
+                )
+            elif "v3.14" in win32gui.GetWindowText(hwnd):
+                PVZ_data.update_PVZ_version(3.14)
                 main_window.title(
                     "杂交版多功能修改器  "
                     + str(current_version)
@@ -875,6 +891,15 @@ def support():
 
     text.pack()
     str1 = (
+        "b0.70\n"
+        "适配杂交版3.14\n"
+        "b0.69\n"
+        "适配杂交版3.13.2\n"
+        "修复了3.11和3.12中自由放置闪退的问题\n"
+        "b0.68\n"
+        "适配杂交版3.12\n"
+        "b0.67\n"
+        "适配杂交版v3.11\n"
         "b0.66\n"
         "适配杂交版3.99\n"
         "b0.63\n"
@@ -1783,6 +1808,14 @@ def mainWindow():
                 )
             elif "v3.0" in win32gui.GetWindowText(hwnd):
                 PVZ_data.update_PVZ_version(3.0)
+                main_window.title(
+                    "杂交版多功能修改器  "
+                    + str(current_version)
+                    + "      游戏版本："
+                    + str(PVZ_data.PVZ_version)
+                )
+            elif "v3.14" in win32gui.GetWindowText(hwnd):
+                PVZ_data.update_PVZ_version(3.14)
                 main_window.title(
                     "杂交版多功能修改器  "
                     + str(current_version)
@@ -9528,6 +9561,17 @@ def mainWindow():
         command=lambda: load_plugin(main_window),
     )
     plugin_button.place(x=100, y=0, relx=0, rely=1, anchor="sw")
+
+    # 在“载入插件”和“选择游戏”按钮之间显示醒目的提示
+    # 将提示放在窗口底部居中，使用红色粗体以提高可见性
+    unsupported_label = ttk.Label(
+        main_window,
+        text="不支持杂交重置版",
+        font=("黑体", 10, "bold"),
+        bootstyle=("danger",),
+    )
+    # 放置在底部中间，略微向上偏移与其他底部控件错开
+    unsupported_label.place(relx=0.5, rely=1, y=-3, anchor="s")
 
     # def recruit():
     #     global main_window
