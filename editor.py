@@ -55,7 +55,7 @@ from PIL import Image, ImageTk
 import traceback
 
 Image.CUBIC = Image.BICUBIC
-current_version = "0.70"
+current_version = "0.71"
 version_url = "https://gitee.com/EFrostBlade/PVZHybrid_Editor/raw/main/version.txt"
 main_window = None
 PVZ_data.update_PVZ_memory(1)
@@ -305,6 +305,14 @@ def chooseGame():
                 )
             elif "v3.0" in window_name:
                 PVZ_data.update_PVZ_version(3.0)
+                main_window.title(
+                    "杂交版多功能修改器  "
+                    + str(current_version)
+                    + "      游戏版本："
+                    + str(PVZ_data.PVZ_version)
+                )
+            elif "v3.15" in window_name:
+                PVZ_data.update_PVZ_version(3.151)
                 main_window.title(
                     "杂交版多功能修改器  "
                     + str(current_version)
@@ -565,6 +573,14 @@ def chooseGame():
                 )
             elif "v2.6" in win32gui.GetWindowText(hwnd):
                 PVZ_data.update_PVZ_version(2.6)
+                main_window.title(
+                    "杂交版多功能修改器  "
+                    + str(current_version)
+                    + "      游戏版本："
+                    + str(PVZ_data.PVZ_version)
+                )
+            elif "v3.15" in win32gui.GetWindowText(hwnd):
+                PVZ_data.update_PVZ_version(3.151)
                 main_window.title(
                     "杂交版多功能修改器  "
                     + str(current_version)
@@ -891,6 +907,8 @@ def support():
 
     text.pack()
     str1 = (
+        "b0.71\n"
+        "适配杂交版3.15\n"
         "b0.70\n"
         "适配杂交版3.14\n"
         "b0.69\n"
@@ -1814,6 +1832,14 @@ def mainWindow():
                     + "      游戏版本："
                     + str(PVZ_data.PVZ_version)
                 )
+            elif "v3.15" in win32gui.GetWindowText(hwnd):
+                PVZ_data.update_PVZ_version(3.151)
+                main_window.title(
+                    "杂交版多功能修改器  "
+                    + str(current_version)
+                    + "      游戏版本："
+                    + str(PVZ_data.PVZ_version)
+                )
             elif "v3.14" in win32gui.GetWindowText(hwnd):
                 PVZ_data.update_PVZ_version(3.14)
                 main_window.title(
@@ -2166,7 +2192,7 @@ def mainWindow():
     diamond_add_entry.bind("<Return>", addDiamond)
     diamond_add_entry.bind("<FocusOut>", addDiamond)
 
-    quick_start_frame = ttk.LabelFrame(common_page, text="快速使用", bootstyle=SUCCESS)
+    quick_start_frame = ttk.Labelframe(common_page, text="快速使用", bootstyle=SUCCESS)
     quick_start_frame.place(x=0, y=0, relx=1, rely=0, anchor=NE)
     over_plant_status = ttk.BooleanVar(quick_start_frame)
     over_plant_check = ttk.Checkbutton(
@@ -2366,7 +2392,7 @@ def mainWindow():
     )
     load_button.grid(row=0, column=1, sticky=W, padx=(10, 0), pady=(2, 2))
 
-    pause_pro_frame = ttk.LabelFrame(common_page, text="高级暂停", bootstyle=SUCCESS)
+    pause_pro_frame = ttk.Labelframe(common_page, text="高级暂停", bootstyle=SUCCESS)
     pause_pro_frame.place(x=0, y=300, relx=1, rely=0, anchor=NE)
     pause_pro_status = ttk.BooleanVar(pause_pro_frame)
     pause_pro_check = ttk.Checkbutton(
@@ -2494,7 +2520,7 @@ def mainWindow():
         "<<ComboboxSelected>>", lambda event: pvz.setShovel(shovel_combobox.current())
     )
 
-    game_speed_frame = ttk.LabelFrame(common_page, text="游戏速度", bootstyle=DARK)
+    game_speed_frame = ttk.Labelframe(common_page, text="游戏速度", bootstyle=DARK)
     game_speed_frame.place(x=0, y=315, anchor=NW)
     game_speed_label = ttk.Label(game_speed_frame, text="1", bootstyle=DARK)
     game_speed_label.grid(row=0, column=0)
@@ -2559,7 +2585,7 @@ def mainWindow():
 
     game_speed_scale.bind("<MouseWheel>", on_mousewheel)
 
-    # game_difficult_frame = ttk.LabelFrame(common_page, text="游戏难度", bootstyle=DARK)
+    # game_difficult_frame = ttk.Labelframe(common_page, text="游戏难度", bootstyle=DARK)
     # game_difficult_frame.place(x=0, y=320, anchor=NW)
     # gameDifficult = ttk.IntVar(game_difficult_frame)
     # ttk.Radiobutton(
@@ -2587,7 +2613,7 @@ def mainWindow():
     #     command=lambda: pvz.setDifficult(gameDifficult.get()),
     # ).grid(row=0, column=2, padx=5)
 
-    game_save_frame = ttk.LabelFrame(common_page, text="存档修改", bootstyle=DARK)
+    game_save_frame = ttk.Labelframe(common_page, text="存档修改", bootstyle=DARK)
     game_save_frame.place(x=0, y=355, anchor=NW)
     # ttk.Label(game_save_frame, text="冒险第").grid(row=0, column=0)
     # adventure_start_level_value = ttk.IntVar(game_save_frame)
@@ -2969,7 +2995,7 @@ def mainWindow():
                 info=shortcut_info: open_change_window(id, info["key"], info["action"])
             )
 
-    shortcut_frame = ttk.LabelFrame(common_page, text="快捷按键")
+    shortcut_frame = ttk.Labelframe(common_page, text="快捷按键")
     shortcut_frame.place(x=180, y=0)
     # 创建快捷键显示文本框和修改按钮
     shortcuts = get_shortcuts()
@@ -3027,7 +3053,7 @@ def mainWindow():
     zombie_page = ttk.Frame(page_tab)
     zombie_page.pack()
     page_tab.add(zombie_page, text="僵尸修改")
-    zombie_list_frame = ttk.LabelFrame(zombie_page, text="僵尸列表", bootstyle=DANGER)
+    zombie_list_frame = ttk.Labelframe(zombie_page, text="僵尸列表", bootstyle=DANGER)
     zombie_list_frame.place(x=0, y=0, anchor=NW, height=260, width=275)
     zombie_list_box_scrollbar = ttk.Scrollbar(zombie_list_frame, bootstyle=DANGER)
     zombie_list_box = ttk.Treeview(
@@ -3134,7 +3160,7 @@ def mainWindow():
 
     zombie_size_entry.bind("<Return>", setZombieSize)
     zombie_size_entry.bind("<FocusOut>", setZombieSize)
-    zombie_position_frame = ttk.LabelFrame(
+    zombie_position_frame = ttk.Labelframe(
         zombie_attribute_frame, text="位置", bootstyle=DANGER
     )
     zombie_position_frame.grid(row=2, column=0, columnspan=4, sticky=W)
@@ -3196,7 +3222,7 @@ def mainWindow():
         zombie_position_frame.focus_set()
 
     zombie_row_combobox.bind("<<ComboboxSelected>>", setZombieRow)
-    zombie_hp_frame = ttk.LabelFrame(
+    zombie_hp_frame = ttk.Labelframe(
         zombie_attribute_frame, text="血量", bootstyle=DANGER
     )
     zombie_hp_frame.grid(row=2, column=4, columnspan=8, sticky=W)
@@ -3253,7 +3279,7 @@ def mainWindow():
 
     zombie_doorHP_entry.bind("<Return>", setZombieDoorHP)
     zombie_doorHP_entry.bind("<FocusOut>", setZombieDoorHP)
-    zombie_control_frame = ttk.LabelFrame(
+    zombie_control_frame = ttk.Labelframe(
         zombie_attribute_frame, text="控制时间", bootstyle=DANGER
     )
     zombie_control_frame.grid(row=3, column=0, columnspan=3, sticky=W)
@@ -3309,7 +3335,7 @@ def mainWindow():
 
     zombie_frozen_entry.bind("<Return>", setZombieFrozen)
     zombie_frozen_entry.bind("<FocusOut>", setZombieFrozen)
-    zombie_flag_frame = ttk.LabelFrame(
+    zombie_flag_frame = ttk.Labelframe(
         zombie_attribute_frame, text="状态标志", bootstyle=DANGER
     )
     zombie_flag_frame.grid(row=3, column=3, columnspan=8, sticky=W)
@@ -3387,7 +3413,7 @@ def mainWindow():
         command=lambda: change_zombie_isDying(),
     ).grid(row=2, column=1)
 
-    zombie_put_frame = ttk.LabelFrame(zombie_page, text="放置僵尸", bootstyle=DANGER)
+    zombie_put_frame = ttk.Labelframe(zombie_page, text="放置僵尸", bootstyle=DANGER)
     zombie_put_frame.place(x=280, y=0, anchor=NW, height=120, width=130)
     ttk.Label(zombie_put_frame, text="第").grid(row=0, column=0)
     zombiePut_start_row_value = ttk.IntVar(zombie_put_frame)
@@ -3498,7 +3524,7 @@ def mainWindow():
         ),
     ).grid(row=3, column=0, columnspan=5, sticky=E)
 
-    zombie_seed_frame = ttk.LabelFrame(zombie_page, text="修改出怪", bootstyle=DANGER)
+    zombie_seed_frame = ttk.Labelframe(zombie_page, text="修改出怪", bootstyle=DANGER)
     zombie_seed_frame.place(x=280, y=130, anchor=NW, height=100, width=130)
     pausee_spawn_status = ttk.BooleanVar(zombie_seed_frame)
     pausee_spawn_check = ttk.Checkbutton(
@@ -3580,7 +3606,7 @@ def mainWindow():
     )
     boss_hp_button.grid(row=3, column=0, columnspan=2, sticky=E)
 
-    zombie_spoils_frame = ttk.LabelFrame(zombie_page, text="击杀掉落", bootstyle=DANGER)
+    zombie_spoils_frame = ttk.Labelframe(zombie_page, text="击杀掉落", bootstyle=DANGER)
     zombie_spoils_frame.place(x=0, y=260, anchor=NW, height=200, width=275)
     spoil_1_percent = ttk.IntVar(zombie_spoils_frame)
     spoil_1_percent_spinbox = ttk.Spinbox(
@@ -3996,7 +4022,7 @@ def mainWindow():
     plant_page = ttk.Frame(page_tab)
     plant_page.pack()
     page_tab.add(plant_page, text="植物修改")
-    plant_list_frame = ttk.LabelFrame(plant_page, text="植物列表", bootstyle=SUCCESS)
+    plant_list_frame = ttk.Labelframe(plant_page, text="植物列表", bootstyle=SUCCESS)
     plant_list_frame.place(x=0, y=0, anchor=NW, height=390, width=235)
     plant_list_box_scrollbar = ttk.Scrollbar(plant_list_frame, bootstyle=SUCCESS)
     plant_list_box = ttk.Treeview(
@@ -4086,7 +4112,7 @@ def mainWindow():
 
     plant_state_entry.bind("<Return>", setPlantState)
     plant_state_entry.bind("<FocusOut>", setPlantState)
-    plant_position_frame = ttk.LabelFrame(
+    plant_position_frame = ttk.Labelframe(
         plant_attribute_frame, text="位置", bootstyle=SUCCESS
     )
     plant_position_frame.grid(row=2, column=0, columnspan=4, sticky=W)
@@ -4182,7 +4208,7 @@ def mainWindow():
 
     plant_hp_entry.bind("<Return>", setPlantHP)
     plant_hp_entry.bind("<FocusOut>", setPlantHP)
-    plant_time_frame = ttk.LabelFrame(
+    plant_time_frame = ttk.Labelframe(
         plant_attribute_frame, text="倒计时", bootstyle=SUCCESS
     )
     plant_time_frame.grid(row=3, column=0, columnspan=3, sticky=W)
@@ -4356,7 +4382,7 @@ def mainWindow():
 
     plant_humtime_entry.bind("<Return>", setPlantHumTime)
     plant_humtime_entry.bind("<FocusOut>", setPlantHumTime)
-    plant_flag_frame = ttk.LabelFrame(
+    plant_flag_frame = ttk.Labelframe(
         plant_attribute_frame, text="状态标志", bootstyle=SUCCESS
     )
     plant_flag_frame.grid(row=3, column=3, columnspan=8, sticky=W)
@@ -4421,7 +4447,7 @@ def mainWindow():
         command=lambda: change_plant_isSleep(),
     ).grid(row=4, column=0)
 
-    plant_put_frame = ttk.LabelFrame(plant_page, text="种植", bootstyle=SUCCESS)
+    plant_put_frame = ttk.Labelframe(plant_page, text="种植", bootstyle=SUCCESS)
     plant_put_frame.place(x=240, y=0, anchor=NW, height=120, width=130)
     ttk.Label(plant_put_frame, text="第").grid(row=0, column=0)
     plantPut_start_row_value = ttk.IntVar(plant_put_frame)
@@ -4948,7 +4974,7 @@ def mainWindow():
     grid_page = ttk.Frame(page_tab)
     grid_page.pack()
     page_tab.add(grid_page, text="场地修改")
-    item_list_frame = ttk.LabelFrame(grid_page, text="物品列表", bootstyle=DARK)
+    item_list_frame = ttk.Labelframe(grid_page, text="物品列表", bootstyle=DARK)
     item_list_frame.place(x=0, y=0, anchor=NW, height=140, width=200)
     item_list_box_scrollbar = ttk.Scrollbar(item_list_frame, bootstyle=DARK)
     item_list_box = ttk.Treeview(
@@ -5117,7 +5143,7 @@ def mainWindow():
                 i = i + 1
             j = j + 1
 
-    ladder_put_frame = ttk.LabelFrame(grid_page, text="搭梯", bootstyle=DARK)
+    ladder_put_frame = ttk.Labelframe(grid_page, text="搭梯", bootstyle=DARK)
     ladder_put_frame.place(x=200, y=0, anchor=NW, height=90, width=130)
     ttk.Label(ladder_put_frame, text="第").grid(row=0, column=0)
     ladder_start_row_value = ttk.IntVar(ladder_put_frame)
@@ -5201,7 +5227,7 @@ def mainWindow():
         command=lambda: putLadders(),
     ).grid(row=2, column=0, columnspan=5, sticky=E)
 
-    car_frame = ttk.LabelFrame(grid_page, text="小车", bootstyle=DANGER)
+    car_frame = ttk.Labelframe(grid_page, text="小车", bootstyle=DANGER)
     car_frame.place(x=330, y=0, anchor=NW, height=120, width=160)
     start_car_value = ttk.IntVar(ladder_put_frame)
     start_car_combobox = ttk.Combobox(
@@ -5426,7 +5452,7 @@ def mainWindow():
 
     item_list_box.bind("<<TreeviewSelect>>", get_item_select)
 
-    formation_frame = ttk.LabelFrame(grid_page, text="布阵", bootstyle=SUCCESS)
+    formation_frame = ttk.Labelframe(grid_page, text="布阵", bootstyle=SUCCESS)
     formation_frame.place(x=0, y=140)
     # 设置字体
     small_font = ("黑体", 8)
@@ -5775,7 +5801,7 @@ def mainWindow():
     puzzle_page = ttk.Frame(page_tab)
     puzzle_page.pack()
     page_tab.add(puzzle_page, text="益智模式")
-    vase_list_frame = ttk.LabelFrame(puzzle_page, text="罐子列表", bootstyle=WARNING)
+    vase_list_frame = ttk.Labelframe(puzzle_page, text="罐子列表", bootstyle=WARNING)
     vase_list_frame.place(x=0, y=0, anchor=NW, height=260, width=240)
     vase_list_box_scrollbar = ttk.Scrollbar(vase_list_frame, bootstyle=WARNING)
     vase_list_box = ttk.Treeview(
@@ -5870,7 +5896,7 @@ def mainWindow():
         vase_state_frame.focus_set()
 
     vase_skin_combobox.bind("<<ComboboxSelected>>", setvaseState)
-    vase_position_frame = ttk.LabelFrame(
+    vase_position_frame = ttk.Labelframe(
         vase_attribute_frame, text="位置", bootstyle=WARNING
     )
     vase_position_frame.grid(row=2, column=0, columnspan=4, sticky=W)
@@ -6016,7 +6042,7 @@ def mainWindow():
 
     vase_list_box.bind("<<TreeviewSelect>>", get_vase_select)
 
-    vase_put_frame = ttk.LabelFrame(puzzle_page, text="放置罐子", bootstyle=SECONDARY)
+    vase_put_frame = ttk.Labelframe(puzzle_page, text="放置罐子", bootstyle=SECONDARY)
     vase_put_frame.place(x=245, y=0, anchor=NW, height=260, width=340)
     ttk.Label(vase_put_frame, text="皮肤", font=("黑体", 8)).grid(
         padx=2, pady=2, row=0, column=0
@@ -6462,7 +6488,7 @@ def mainWindow():
         command=lambda: putVases(2),
     ).pack(side=LEFT, padx=2)
 
-    iz_frame = ttk.LabelFrame(puzzle_page, text="我是僵尸", bootstyle=DANGER)
+    iz_frame = ttk.Labelframe(puzzle_page, text="我是僵尸", bootstyle=DANGER)
     iz_frame.place(x=0, y=265, anchor=NW, height=300, width=320)
 
     iz_first_row = ttk.Frame(iz_frame)
@@ -6521,7 +6547,7 @@ def mainWindow():
         random_button_row_frame, text="随机布阵", command=lambda: put_random_plant()
     ).pack(side=LEFT, padx=10)
 
-    change_head_frame = ttk.LabelFrame(iz_frame, text="礼盒僵尸", bootstyle=DANGER)
+    change_head_frame = ttk.Labelframe(iz_frame, text="礼盒僵尸", bootstyle=DANGER)
     change_head_frame.pack()
     change_head_status = ttk.BooleanVar(change_head_frame)
     global change_head_zombie_type
@@ -6739,7 +6765,7 @@ def mainWindow():
     page_tab.add(slot_page, text="卡槽修改")
     slots_configuration_mode = ttk.BooleanVar(slot_page)
     slots_configuration_mode.set(False)
-    slots_frame = ttk.LabelFrame(slot_page, text="监视模式", bootstyle=SUCCESS)
+    slots_frame = ttk.Labelframe(slot_page, text="监视模式", bootstyle=SUCCESS)
     slots_frame.place(x=0, y=0)
     slot_list = list()
 
@@ -6908,7 +6934,7 @@ def mainWindow():
     for slot_number in range(1, 17):
         create_slot_ui(slot_number)
 
-    slots_config_frame = ttk.LabelFrame(slot_page, text="卡槽设置", bootstyle=SUCCESS)
+    slots_config_frame = ttk.Labelframe(slot_page, text="卡槽设置", bootstyle=SUCCESS)
     slots_config_frame.place(x=0, y=0, relx=1, anchor=NE)
     slot_num_frame = ttk.Frame(slots_config_frame)
     slot_num_frame.pack()
@@ -6995,7 +7021,7 @@ def mainWindow():
     )
     random_slots_haszombie_check.pack()
 
-    card_select_frame = ttk.LabelFrame(slot_page, text="选卡配置", bootstyle=DARK)
+    card_select_frame = ttk.Labelframe(slot_page, text="选卡配置", bootstyle=DARK)
     card_select_frame.place(x=0, y=180, relx=1, anchor=NE)
 
     def changeSlotsConfiguration():
@@ -7324,7 +7350,7 @@ def mainWindow():
         command=lambda: apply_slots_config(),
     ).grid(row=1, column=2)
 
-    card_select_frame = ttk.LabelFrame(common_page, text="快捷种植", bootstyle=PRIMARY)
+    card_select_frame = ttk.Labelframe(common_page, text="快捷种植", bootstyle=PRIMARY)
     card_select_frame.place(x=0, y=440, relx=0, anchor=NW)
     ttk.Label(card_select_frame, text="1:").grid(row=0, column=0)
     slot_1_key = ttk.Combobox(
@@ -7998,7 +8024,7 @@ def mainWindow():
     )
     slot_key_check.grid(row=2, column=8, columnspan=4)
 
-    hp_show_frame = ttk.LabelFrame(common_page, text="显血修复", bootstyle=DANGER)
+    hp_show_frame = ttk.Labelframe(common_page, text="显血修复", bootstyle=DANGER)
     hp_show_frame.place(x=505, y=440, relx=0, anchor=NW)
     fog_hp_status = ttk.BooleanVar(hp_show_frame)
     fog_hp_check = ttk.Checkbutton(
@@ -8079,7 +8105,7 @@ def mainWindow():
     garden_page.pack()
     page_tab.add(garden_page, text="花园相关")
 
-    potted_list_frame = ttk.LabelFrame(garden_page, text="盆栽列表", bootstyle=SUCCESS)
+    potted_list_frame = ttk.Labelframe(garden_page, text="盆栽列表", bootstyle=SUCCESS)
     potted_list_frame.place(x=0, y=0, anchor=NW, height=300, width=335)
     potted_list_box_scrollbar = ttk.Scrollbar(potted_list_frame, bootstyle=SUCCESS)
     potted_list_box = ttk.Treeview(
@@ -8195,7 +8221,7 @@ def mainWindow():
         potted_state_frame.focus_set()
 
     potted_state_combobox.bind("<<ComboboxSelected>>", setPottedState)
-    potted_position_frame = ttk.LabelFrame(
+    potted_position_frame = ttk.Labelframe(
         potted_attribute_frame, text="位置", bootstyle=SUCCESS
     )
     potted_position_frame.grid(row=2, column=0, columnspan=12, sticky=W, padx=2, pady=2)
@@ -8418,7 +8444,7 @@ def mainWindow():
 
     potted_list_box.bind("<<TreeviewSelect>>", get_potted_select)
 
-    easy_add_potted_frame = ttk.LabelFrame(
+    easy_add_potted_frame = ttk.Labelframe(
         garden_page, text="简易添加", bootstyle=PRIMARY
     )
     easy_add_potted_frame.place(x=0, y=305, anchor=NW)
@@ -8553,7 +8579,7 @@ def mainWindow():
         "<FocusOut>", lambda x: pvz.setTotalPottedNum(total_potted_num_value.get())
     )
 
-    tree_frame = ttk.LabelFrame(garden_page, text="智慧树")
+    tree_frame = ttk.Labelframe(garden_page, text="智慧树")
     tree_frame.place(x=340, y=0, anchor=NW)
     tree_height_label = ttk.Label(tree_frame, text="高度:")
     tree_height_label.grid(row=0, column=0, sticky=W, padx=5, pady=5)
@@ -8571,7 +8597,7 @@ def mainWindow():
         "<Return>", lambda x: pvz.setTreeFertilizer(tree_fertilizer.get())
     )
 
-    garden_item_frame = ttk.LabelFrame(garden_page, text="花园物品")
+    garden_item_frame = ttk.Labelframe(garden_page, text="花园物品")
     garden_item_frame.place(x=340, y=105, anchor=NW)
     garden_item_fertilizer_label = ttk.Label(garden_item_frame, text="肥料:")
     garden_item_fertilizer_label.grid(row=0, column=0, sticky=W, padx=5, pady=5)
@@ -8618,7 +8644,7 @@ def mainWindow():
         lambda x: pvz.setGardenItemChocolate(garden_item_chocolate.get()),
     )
 
-    add_potted_frame = ttk.LabelFrame(garden_page, text="添加盆栽", bootstyle=PRIMARY)
+    add_potted_frame = ttk.Labelframe(garden_page, text="添加盆栽", bootstyle=PRIMARY)
     add_potted_frame.place(x=340, y=250)
     add_potted_state_frame = ttk.Frame(add_potted_frame)
     add_potted_state_frame.grid(row=0, column=0, columnspan=12, sticky=W)
@@ -8664,7 +8690,7 @@ def mainWindow():
     )
     add_potted_state_combobox.grid(row=1, column=1, sticky=W, padx=2, pady=2)
 
-    add_potted_position_frame = ttk.LabelFrame(
+    add_potted_position_frame = ttk.Labelframe(
         add_potted_frame, text="位置", bootstyle=SUCCESS
     )
     add_potted_position_frame.grid(
@@ -8832,7 +8858,7 @@ def mainWindow():
             add_potted_water_max_var.get(),
         )
 
-    garden_all_frame = ttk.LabelFrame(garden_page, text="一键满足", bootstyle=SUCCESS)
+    garden_all_frame = ttk.Labelframe(garden_page, text="一键满足", bootstyle=SUCCESS)
     garden_all_frame.place(x=0, y=0, relx=1, rely=0, anchor=NE)
     water_all_button = ttk.Button(
         garden_all_frame,
@@ -8924,7 +8950,7 @@ def mainWindow():
 
         # 填充对话内容
         for i, (height, message) in enumerate(PVZ_data.TREE_OF_WISDOM):
-            wisdom_item = ttk.LabelFrame(
+            wisdom_item = ttk.Labelframe(
                 wisdom_content, text=f"高度: {height}米", bootstyle=SUCCESS
             )
             wisdom_item.pack(fill=X, expand=TRUE, padx=10, pady=5)
@@ -8955,7 +8981,7 @@ def mainWindow():
 
         # 填充奖励内容
         for i, (height, reward) in enumerate(PVZ_data.TREE_OF_WISDOM_REWARD):
-            reward_item = ttk.LabelFrame(
+            reward_item = ttk.Labelframe(
                 reward_content, text=f"高度: {height}米", bootstyle=WARNING
             )
             reward_item.pack(fill=X, expand=TRUE, padx=10, pady=5)
@@ -9046,7 +9072,7 @@ def mainWindow():
     other_page = ttk.Frame(page_tab)
     other_page.pack()
     page_tab.add(other_page, text="暂未分类")
-    other_toggle_frame = ttk.LabelFrame(other_page, text="未分类开关")
+    other_toggle_frame = ttk.Labelframe(other_page, text="未分类开关")
     other_toggle_frame.pack(anchor=W)
 
     doom_no_hole_status = ttk.BooleanVar(other_toggle_frame)
@@ -9173,7 +9199,7 @@ def mainWindow():
         command=lambda: pvz.lockLevel(jump_level_status.get(), jump_level_value.get()),
     ).pack(side=LEFT)
 
-    effect_frame = ttk.LabelFrame(other_page, text="生成特效")
+    effect_frame = ttk.Labelframe(other_page, text="生成特效")
     effect_frame.pack(anchor=W)
     ttk.Label(effect_frame, text="x").grid(row=0, column=0)
     effect_x_value = ttk.IntVar(effect_frame)
@@ -9220,7 +9246,7 @@ def mainWindow():
         ),
     ).grid(row=1, column=4, sticky=E)
 
-    bullet_creat_frame = ttk.LabelFrame(other_page, text="生成子弹")
+    bullet_creat_frame = ttk.Labelframe(other_page, text="生成子弹")
     bullet_creat_frame.pack(anchor=W)
 
     # 添加子弹到文本框的函数
@@ -9323,7 +9349,7 @@ def mainWindow():
         bootstyle="danger-round-toggle",
         command=lambda: pvz.modifySpawNum(spaw_num_status.get(), spaw_num_value.get()),
     ).pack(side=LEFT)
-    spaw_type_frame = ttk.LabelFrame(zombie_spaw_page, text="出怪修改")
+    spaw_type_frame = ttk.Labelframe(zombie_spaw_page, text="出怪修改")
     spaw_type_frame.pack(anchor=W)
 
     # 存储复选框状态的字典
