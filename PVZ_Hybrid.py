@@ -1,4 +1,4 @@
-# ruff: noqa: E722
+﻿# ruff: noqa: E722
 import ctypes
 import pymem.ressources.kernel32
 import pymem.ressources.structure
@@ -59,9 +59,9 @@ def calculate_call_address(ctypes_obj):
 
 def getMap():
     try:
-        map = PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(
-                PVZ_data.PVZ_memory.read_int(0x006A9EC0) + 0x768
+        map = PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(
+                PVZ_data.PVZ_memory.read_uint(0x006A9EC0) + 0x768
             )
             + 0x554C
         )
@@ -114,12 +114,12 @@ def getMap():
 
 def getDifficult():
     difficultAddr = (
-        PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x82C
+        PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x82C
         )
         + 0x428
     )
-    difficultValue = PVZ_data.PVZ_memory.read_int(difficultAddr)
+    difficultValue = PVZ_data.PVZ_memory.read_uint(difficultAddr)
     if difficultValue == -1:
         return 1
     if difficultValue == 0:
@@ -130,8 +130,8 @@ def getDifficult():
 
 def setDifficult(difficult):
     difficultAddr = (
-        PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x82C
+        PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x82C
         )
         + 0x428
     )
@@ -145,8 +145,8 @@ def setDifficult(difficult):
 
 def getState():
     try:
-        game_state = PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x7FC
+        game_state = PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x7FC
         )
         return game_state  # 1主菜单 2选局内  5帮助  7关卡选择
     except:
@@ -155,9 +155,9 @@ def getState():
 
 def getNowFlag():
     try:
-        nowFlag = PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(
-                PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x768
+        nowFlag = PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(
+                PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x768
             )
             + 0x557C
         )
@@ -231,6 +231,8 @@ def get_zombie_num():
         zombie_num = 131
     elif PVZ_data.PVZ_version == 3.16:
         zombie_num = 132
+    elif PVZ_data.PVZ_version == 3.17:
+        zombie_num = 139
     return zombie_num
 
 
@@ -299,6 +301,8 @@ def getRandomZombie(hasBoss=False):
         zombieType = random.randint(0, 130)
     elif PVZ_data.PVZ_version == 3.16:
         zombieType = random.randint(0, 131)
+    elif PVZ_data.PVZ_version == 3.17:
+        zombieType = random.randint(0, 138)
     if hasBoss is True:
         return zombieType
     else:
@@ -366,6 +370,8 @@ def getRandomPlant(isPut=False):
         plantType = random.randint(0, 319)
     elif PVZ_data.PVZ_version == 3.16:
         plantType = random.randint(0, 325)
+    elif PVZ_data.PVZ_version == 3.17:
+        plantType = random.randint(0, 328)
 
     if plantType >= 48:
         plantType = plantType + 27
@@ -384,9 +390,9 @@ def getRandomPlant(isPut=False):
 def getPlantList():
     plant_list = []
     try:
-        plant_num = PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(
-                PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x768
+        plant_num = PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(
+                PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x768
             )
             + 0xBC
         )
@@ -396,9 +402,9 @@ def getPlantList():
     j = 0
     while i < plant_num:
         plant_addresss = (
-            PVZ_data.PVZ_memory.read_int(
-                PVZ_data.PVZ_memory.read_int(
-                    PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x768
+            PVZ_data.PVZ_memory.read_uint(
+                PVZ_data.PVZ_memory.read_uint(
+                    PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x768
                 )
                 + 0xAC
             )
@@ -415,9 +421,9 @@ def getPlantList():
 def getZombieList():
     zombie_list = []
     try:
-        zombie_num = PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(
-                PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x768
+        zombie_num = PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(
+                PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x768
             )
             + 0xA0
         )
@@ -427,9 +433,9 @@ def getZombieList():
     j = 0
     while i < zombie_num:
         zombie_addresss = (
-            PVZ_data.PVZ_memory.read_int(
-                PVZ_data.PVZ_memory.read_int(
-                    PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x768
+            PVZ_data.PVZ_memory.read_uint(
+                PVZ_data.PVZ_memory.read_uint(
+                    PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x768
                 )
                 + 0x90
             )
@@ -446,9 +452,9 @@ def getZombieList():
 def getItemList():
     item_list = []
     try:
-        item_num = PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(
-                PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x768
+        item_num = PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(
+                PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x768
             )
             + 0x12C
         )
@@ -458,9 +464,9 @@ def getItemList():
     j = 0
     while i < item_num:
         item_addresss = (
-            PVZ_data.PVZ_memory.read_int(
-                PVZ_data.PVZ_memory.read_int(
-                    PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x768
+            PVZ_data.PVZ_memory.read_uint(
+                PVZ_data.PVZ_memory.read_uint(
+                    PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x768
                 )
                 + 0x11C
             )
@@ -483,42 +489,42 @@ def backGround(f):
 
 def getSun():
     sunAddr = (
-        PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x768
+        PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x768
         )
         + 0x5560
     )
-    sunNow = PVZ_data.PVZ_memory.read_int(sunAddr)
+    sunNow = PVZ_data.PVZ_memory.read_uint(sunAddr)
     return sunNow
 
 
 def addSun(sunIncrement):
     sunAddr = (
-        PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x768
+        PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x768
         )
         + 0x5560
     )
-    sunNow = PVZ_data.PVZ_memory.read_int(sunAddr)
+    sunNow = PVZ_data.PVZ_memory.read_uint(sunAddr)
     PVZ_data.PVZ_memory.write_int(sunAddr, sunNow + int(sunIncrement))
 
 
 def subSun(sunDecrement):
     sunAddr = (
-        PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x768
+        PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x768
         )
         + 0x5560
     )
-    sunNow = PVZ_data.PVZ_memory.read_int(sunAddr)
+    sunNow = PVZ_data.PVZ_memory.read_uint(sunAddr)
     sun = sunNow - int(sunDecrement)
     PVZ_data.PVZ_memory.write_int(sunAddr, sun)
 
 
 def setSun(sun):
     sunAddr = (
-        PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x768
+        PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x768
         )
         + 0x5560
     )
@@ -527,19 +533,19 @@ def setSun(sun):
 
 def getShovel():
     shovelAddr = (
-        PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x82C
+        PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x82C
         )
         + 0x1CAC
     )
-    shovelNow = PVZ_data.PVZ_memory.read_int(shovelAddr)
+    shovelNow = PVZ_data.PVZ_memory.read_uint(shovelAddr)
     return shovelNow
 
 
 def setShovel(shovel):
     shovelAddr = (
-        PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x82C
+        PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x82C
         )
         + 0x1CAC
     )
@@ -555,30 +561,30 @@ def cancalSunFall(f):
 
 def getSilver():
     silverAddr = (
-        PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x82C
+        PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x82C
         )
         + 0x208
     )
-    silverNow = PVZ_data.PVZ_memory.read_int(silverAddr)
+    silverNow = PVZ_data.PVZ_memory.read_uint(silverAddr)
     return silverNow
 
 
 def addSilver(silverIncrement):
     silverAddr = (
-        PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x82C
+        PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x82C
         )
         + 0x208
     )
-    silverNow = PVZ_data.PVZ_memory.read_int(silverAddr)
+    silverNow = PVZ_data.PVZ_memory.read_uint(silverAddr)
     PVZ_data.PVZ_memory.write_int(silverAddr, silverNow + int(silverIncrement))
 
 
 def setSilver(silver):
     silverAddr = (
-        PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x82C
+        PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x82C
         )
         + 0x208
     )
@@ -587,30 +593,30 @@ def setSilver(silver):
 
 def getGold():
     goldAddr = (
-        PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x82C
+        PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x82C
         )
         + 0x20C
     )
-    goldNow = PVZ_data.PVZ_memory.read_int(goldAddr)
+    goldNow = PVZ_data.PVZ_memory.read_uint(goldAddr)
     return goldNow
 
 
 def addGold(goldIncrement):
     goldAddr = (
-        PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x82C
+        PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x82C
         )
         + 0x20C
     )
-    goldNow = PVZ_data.PVZ_memory.read_int(goldAddr)
+    goldNow = PVZ_data.PVZ_memory.read_uint(goldAddr)
     PVZ_data.PVZ_memory.write_int(goldAddr, goldNow + int(goldIncrement))
 
 
 def setGold(gold):
     goldAddr = (
-        PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x82C
+        PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x82C
         )
         + 0x20C
     )
@@ -619,30 +625,30 @@ def setGold(gold):
 
 def getDiamond():
     diamondAddr = (
-        PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x82C
+        PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x82C
         )
         + 0x210
     )
-    diamondNow = PVZ_data.PVZ_memory.read_int(diamondAddr)
+    diamondNow = PVZ_data.PVZ_memory.read_uint(diamondAddr)
     return diamondNow
 
 
 def addDiamond(diamondIncrement):
     diamondAddr = (
-        PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x82C
+        PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x82C
         )
         + 0x210
     )
-    diamondNow = PVZ_data.PVZ_memory.read_int(diamondAddr)
+    diamondNow = PVZ_data.PVZ_memory.read_uint(diamondAddr)
     PVZ_data.PVZ_memory.write_int(diamondAddr, diamondNow + int(diamondIncrement))
 
 
 def setDiamond(diamond):
     diamondAddr = (
-        PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x82C
+        PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x82C
         )
         + 0x210
     )
@@ -715,9 +721,9 @@ def zombieInvisible(f):
 
 
 def killAllZombies():
-    zomNum = PVZ_data.PVZ_memory.read_int(
-        PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x768
+    zomNum = PVZ_data.PVZ_memory.read_uint(
+        PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x768
         )
         + 0xA0
     )
@@ -725,9 +731,9 @@ def killAllZombies():
     j = 0
     while i < zomNum:
         zomAddresss = (
-            PVZ_data.PVZ_memory.read_int(
-                PVZ_data.PVZ_memory.read_int(
-                    PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x768
+            PVZ_data.PVZ_memory.read_uint(
+                PVZ_data.PVZ_memory.read_uint(
+                    PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x768
                 )
                 + 0x90
             )
@@ -749,20 +755,20 @@ def autoCollect(f):
 
 def changeSlot(n, type):
     slotAddr = (
-        PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x768
+        PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x768
         )
         + 0x144
     )
     PVZ_data.PVZ_memory.write_int(
-        PVZ_data.PVZ_memory.read_int(slotAddr) + 0x5C + 0x50 * (n - 1), type
+        PVZ_data.PVZ_memory.read_uint(slotAddr) + 0x5C + 0x50 * (n - 1), type
     )
 
 
 def win():
     winAddr = (
-        PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x768
+        PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x768
         )
         + 0x55FC
     )
@@ -925,8 +931,8 @@ def shovelpro(f):
 def randomSlots_operstion(randomSlots_event, haszombie):
     while not randomSlots_event.is_set():
         plant1addr = (
-            PVZ_data.PVZ_memory.read_int(
-                PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x768
+            PVZ_data.PVZ_memory.read_uint(
+                PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x768
             )
             + 0x144
         )
@@ -937,7 +943,7 @@ def randomSlots_operstion(randomSlots_event, haszombie):
                 else:
                     plant = getRandomZombie(True) + 256
                 PVZ_data.PVZ_memory.write_int(
-                    PVZ_data.PVZ_memory.read_int(plant1addr) + 0x5C + 0x50 * i, plant
+                    PVZ_data.PVZ_memory.read_uint(plant1addr) + 0x5C + 0x50 * i, plant
                 )
         elif PVZ_data.PVZ_version < 3.4:
             for i in range(0, 16):
@@ -946,7 +952,7 @@ def randomSlots_operstion(randomSlots_event, haszombie):
                 else:
                     plant = getRandomZombie(True) + 256
                 PVZ_data.PVZ_memory.write_int(
-                    PVZ_data.PVZ_memory.read_int(plant1addr) + 0x5C + 0x50 * i, plant
+                    PVZ_data.PVZ_memory.read_uint(plant1addr) + 0x5C + 0x50 * i, plant
                 )
         else:
             for i in range(0, 16):
@@ -955,7 +961,7 @@ def randomSlots_operstion(randomSlots_event, haszombie):
                 else:
                     plant = getRandomZombie(True) + 512
                 PVZ_data.PVZ_memory.write_int(
-                    PVZ_data.PVZ_memory.read_int(plant1addr) + 0x5C + 0x50 * i, plant
+                    PVZ_data.PVZ_memory.read_uint(plant1addr) + 0x5C + 0x50 * i, plant
                 )
 
 
@@ -979,7 +985,7 @@ def randomSlots(f, haszombie):
 
 
 def changeGameSpeed(s):
-    FrameDurationAddr = PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x454
+    FrameDurationAddr = PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x454
     if s == 0:
         PVZ_data.PVZ_memory.write_int(FrameDurationAddr, 10)
         PVZ_data.PVZ_memory.write_bytes(0x6A9EAA, b"\x01", 1)
@@ -1012,8 +1018,8 @@ def changeGameSpeed(s):
 
 def completeAdvanture(level):
     advantureAddr = (
-        PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x82C
+        PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x82C
         )
         + 0x42C
     )
@@ -1022,8 +1028,8 @@ def completeAdvanture(level):
 
 def lockAdvanture(level):
     advantureAddr = (
-        PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x82C
+        PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x82C
         )
         + 0x42C
     )
@@ -1032,8 +1038,8 @@ def lockAdvanture(level):
 
 def completeChallenge(level):
     challengeAddr = (
-        PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x82C
+        PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x82C
         )
         + 0x82C
     )
@@ -1042,8 +1048,8 @@ def completeChallenge(level):
 
 def lockChallenge(level):
     challengeAddr = (
-        PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x82C
+        PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x82C
         )
         + 0x82C
     )
@@ -1052,8 +1058,8 @@ def lockChallenge(level):
 
 def completeMiniGame(level):
     challengeAddr = (
-        PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x82C
+        PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x82C
         )
         + 0x202C
     )
@@ -1062,8 +1068,8 @@ def completeMiniGame(level):
 
 def completePuzzle(level):
     challengeAddr = (
-        PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x82C
+        PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x82C
         )
         + 0x242C
     )
@@ -1072,8 +1078,8 @@ def completePuzzle(level):
 
 def lockPuzzle(level):
     challengeAddr = (
-        PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x82C
+        PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x82C
         )
         + 0x242C
     )
@@ -1082,8 +1088,8 @@ def lockPuzzle(level):
 
 def completeHero(level):
     challengeAddr = (
-        PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x82C
+        PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x82C
         )
         + 0x282C
     )
@@ -1092,8 +1098,8 @@ def completeHero(level):
 
 def lockHero(level):
     challengeAddr = (
-        PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x82C
+        PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x82C
         )
         + 0x282C
     )
@@ -1102,8 +1108,8 @@ def lockHero(level):
 
 def lockMiniGame(level):
     challengeAddr = (
-        PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x82C
+        PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x82C
         )
         + 0x202C
     )
@@ -1112,8 +1118,8 @@ def lockMiniGame(level):
 
 def completeStore(level):
     storeAddr = (
-        PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x82C
+        PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x82C
         )
         + 0xF50
     )
@@ -1122,8 +1128,8 @@ def completeStore(level):
 
 def lockStore(level):
     storeAddr = (
-        PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x82C
+        PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x82C
         )
         + 0xF50
     )
@@ -1132,8 +1138,8 @@ def lockStore(level):
 
 def completePeak(level):
     peakAddr = (
-        PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x82C
+        PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x82C
         )
         + 0x2C2C
     )
@@ -1142,8 +1148,8 @@ def completePeak(level):
 
 def lockPeak(level):
     peakAddr = (
-        PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x82C
+        PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x82C
         )
         + 0x2C2C
     )
@@ -1152,8 +1158,8 @@ def lockPeak(level):
 
 def completeSkin(level):
     skinAddr = (
-        PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x82C
+        PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x82C
         )
         + 0x302C
     )
@@ -1162,8 +1168,8 @@ def completeSkin(level):
 
 def lockSkin(level):
     skinAddr = (
-        PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x82C
+        PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x82C
         )
         + 0x302C
     )
@@ -1172,8 +1178,8 @@ def lockSkin(level):
 
 def completeTS(level):
     tsAddr = (
-        PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x82C
+        PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x82C
         )
         + 0x34AC
     )
@@ -1182,8 +1188,8 @@ def completeTS(level):
 
 def lockTS(level):
     tsAddr = (
-        PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x82C
+        PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x82C
         )
         + 0x34AC
     )
@@ -1197,8 +1203,8 @@ def achevement():
 
 def completeAchievement(no):
     achievementAddr = (
-        PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x82C
+        PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x82C
         )
         + 0x1CDC
     )
@@ -1506,15 +1512,15 @@ def conveyorBeltFull(f):
 def getEndlessRound():
     try:
         endlessRoundAddr = (
-            PVZ_data.PVZ_memory.read_int(
-                PVZ_data.PVZ_memory.read_int(
-                    PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x768
+            PVZ_data.PVZ_memory.read_uint(
+                PVZ_data.PVZ_memory.read_uint(
+                    PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x768
                 )
                 + 0x160
             )
             + 0x6C
         )
-        return PVZ_data.PVZ_memory.read_int(endlessRoundAddr)
+        return PVZ_data.PVZ_memory.read_uint(endlessRoundAddr)
     except:
         return "未知"
 
@@ -1522,9 +1528,9 @@ def getEndlessRound():
 def setEndlessRound(endlessRound):
     try:
         endlessRoundAddr = (
-            PVZ_data.PVZ_memory.read_int(
-                PVZ_data.PVZ_memory.read_int(
-                    PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x768
+            PVZ_data.PVZ_memory.read_uint(
+                PVZ_data.PVZ_memory.read_uint(
+                    PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x768
                 )
                 + 0x160
             )
@@ -3127,9 +3133,9 @@ def setPlantBullet(f, plantType, bulletType, mode):
 def startAllCars():
     rows = getMap()
     try:
-        car_num = PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(
-                PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x768
+        car_num = PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(
+                PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x768
             )
             + 0x110
         )
@@ -3140,9 +3146,9 @@ def startAllCars():
     start_car_list = [0] * rows
     while i < car_num:
         car_addresss = (
-            PVZ_data.PVZ_memory.read_int(
-                PVZ_data.PVZ_memory.read_int(
-                    PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x768
+            PVZ_data.PVZ_memory.read_uint(
+                PVZ_data.PVZ_memory.read_uint(
+                    PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x768
                 )
                 + 0x100
             )
@@ -3429,9 +3435,9 @@ def morph_all_plant():
     print(1)
     plant_list = []
     try:
-        plant_num = PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(
-                PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x768
+        plant_num = PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(
+                PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x768
             )
             + 0xBC
         )
@@ -3441,9 +3447,9 @@ def morph_all_plant():
     j = 0
     while i < plant_num:
         plant_addresss = (
-            PVZ_data.PVZ_memory.read_int(
-                PVZ_data.PVZ_memory.read_int(
-                    PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x768
+            PVZ_data.PVZ_memory.read_uint(
+                PVZ_data.PVZ_memory.read_uint(
+                    PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x768
                 )
                 + 0xAC
             )
@@ -3826,9 +3832,9 @@ def spawisModified():
 
 def clearPlants():
     try:
-        plant_num = PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(
-                PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x768
+        plant_num = PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(
+                PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x768
             )
             + 0xBC
         )
@@ -3838,9 +3844,9 @@ def clearPlants():
     j = 0
     while i < plant_num:
         plant_addresss = (
-            PVZ_data.PVZ_memory.read_int(
-                PVZ_data.PVZ_memory.read_int(
-                    PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x768
+            PVZ_data.PVZ_memory.read_uint(
+                PVZ_data.PVZ_memory.read_uint(
+                    PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x768
                 )
                 + 0xAC
             )
@@ -4671,6 +4677,41 @@ def globalSpawModify(f, zombieTypes):
             pymem.memory.free_memory(
                 PVZ_data.PVZ_memory.process_handle, newmem_globalSpawModify
             )
+    elif PVZ_data.PVZ_version == 3.17:
+        if f:
+            PVZ_data.PVZ_memory.write_bytes(0x00425855, b"\xeb", 1)
+            PVZ_data.PVZ_memory.write_bytes(0x0042584E, b"\x90\x90\x90\x90\x90", 5)
+            newmem_globalSpawModify = pymem.memory.allocate_memory(
+                PVZ_data.PVZ_memory.process_handle, 256
+            )
+            shellcode = asm.Asm(newmem_globalSpawModify)
+            for i in range(0, 139):
+                if str(i) in zombieTypes:
+                    print(i)
+                    shellcode.mov_byte_ptr_exx_add_dword_byte(asm.EDX, 0x57D4 + i, 1)
+                else:
+                    shellcode.mov_byte_ptr_exx_add_dword_byte(asm.EDX, 0x57D4 + i, 0)
+            shellcode.jmp(0x00425D1D)
+            PVZ_data.PVZ_memory.write_bytes(
+                newmem_globalSpawModify,
+                bytes(shellcode.code[: shellcode.index]),
+                shellcode.index,
+            )
+            PVZ_data.PVZ_memory.write_bytes(
+                0x008230C1,
+                b"\xe9"
+                + calculate_call_address(newmem_globalSpawModify - 0x008230C6)
+                + b"\x90",
+                6,
+            )
+            spawisModified()
+        else:
+            PVZ_data.PVZ_memory.write_bytes(0x00425855, b"\x7f", 1)
+            PVZ_data.PVZ_memory.write_bytes(0x0042584E, b"\xe9\xad\xaa\x48\x00", 5)
+            PVZ_data.PVZ_memory.write_bytes(0x008240BB, b"\x0f\x85\x0c\x00\x00\x00", 6)
+            pymem.memory.free_memory(
+                PVZ_data.PVZ_memory.process_handle, newmem_globalSpawModify
+            )
 
 
 def changeZombieHead(f, zombieType):
@@ -4918,6 +4959,7 @@ def changeZombieHead(f, zombieType):
         or PVZ_data.PVZ_version == 3.14
         or PVZ_data.PVZ_version == 3.151
         or PVZ_data.PVZ_version == 3.16
+        or PVZ_data.PVZ_version == 3.17
     ):
         if f:
             newmem_changeZombieHead = pymem.memory.allocate_memory(
@@ -5358,9 +5400,9 @@ def creatBullet(bullets_list):
 
 def clearCards(type):
     try:
-        card_num = PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(
-                PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x768
+        card_num = PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(
+                PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x768
             )
             + 0xF4
         )
@@ -5371,9 +5413,9 @@ def clearCards(type):
     j = 0
     while i < card_num:
         card_addresss = (
-            PVZ_data.PVZ_memory.read_int(
-                PVZ_data.PVZ_memory.read_int(
-                    PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x768
+            PVZ_data.PVZ_memory.read_uint(
+                PVZ_data.PVZ_memory.read_uint(
+                    PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x768
                 )
                 + 0xE4
             )
@@ -5381,7 +5423,7 @@ def clearCards(type):
         )
         card_exist = PVZ_data.PVZ_memory.read_bytes(card_addresss + 0x38, 1)
         if card_exist == b"\x00":
-            card_plant_type = PVZ_data.PVZ_memory.read_int(card_addresss + 0x68)
+            card_plant_type = PVZ_data.PVZ_memory.read_uint(card_addresss + 0x68)
             if type == 0:
                 if card_plant_type < 255:
                     PVZ_data.PVZ_memory.write_bytes(card_addresss + 0x38, b"\x01", 1)
@@ -5523,9 +5565,9 @@ def bungeeFix(f):
 def findBoss():
     bossList = []
     try:
-        zombie_num = PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(
-                PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x768
+        zombie_num = PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(
+                PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x768
             )
             + 0xA0
         )
@@ -5535,9 +5577,9 @@ def findBoss():
     j = 0
     while i < zombie_num:
         zombie_addresss = (
-            PVZ_data.PVZ_memory.read_int(
-                PVZ_data.PVZ_memory.read_int(
-                    PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x768
+            PVZ_data.PVZ_memory.read_uint(
+                PVZ_data.PVZ_memory.read_uint(
+                    PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x768
                 )
                 + 0x90
             )
@@ -7257,6 +7299,7 @@ def overPlant(f):
             and PVZ_data.PVZ_version != 3.14
             and PVZ_data.PVZ_version != 3.151
             and PVZ_data.PVZ_version != 3.16
+            and PVZ_data.PVZ_version != 3.17
         ):
             PVZ_data.PVZ_memory.write_bytes(0x004109A5, b"\xeb\x2d", 2)
     else:
@@ -7300,6 +7343,7 @@ def overPlant(f):
             and PVZ_data.PVZ_version != 3.14
             and PVZ_data.PVZ_version != 3.151
             and PVZ_data.PVZ_version != 3.16
+            and PVZ_data.PVZ_version != 3.17
         ):
             PVZ_data.PVZ_memory.write_bytes(0x004109A5, b"\x75\x2d", 2)
 
@@ -8026,7 +8070,7 @@ def iz_random_formation():
         return PVZ_data.plantsType[plant_type] in plant_list
 
     clearPlants()
-    red_line_value = PVZ_data.PVZ_memory.read_int(0x004255DD)
+    red_line_value = PVZ_data.PVZ_memory.read_uint(0x004255DD)
     rows = getMap()
     pausePro(1)
     for r in range(0, rows):
@@ -8130,8 +8174,8 @@ def randomZombieSlots_operstion(
 ):
     while not randomSlots_event.is_set():
         plant1addr = (
-            PVZ_data.PVZ_memory.read_int(
-                PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x768
+            PVZ_data.PVZ_memory.read_uint(
+                PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x768
             )
             + 0x144
         )
@@ -8142,7 +8186,7 @@ def randomZombieSlots_operstion(
             else:
                 slot = slot + 512
             PVZ_data.PVZ_memory.write_int(
-                PVZ_data.PVZ_memory.read_int(plant1addr) + 0x5C + 0x50 * i, slot
+                PVZ_data.PVZ_memory.read_uint(plant1addr) + 0x5C + 0x50 * i, slot
             )
 
 
@@ -8220,6 +8264,7 @@ def setBossHP(no, hp):
         or PVZ_data.PVZ_version == 3.14
         or PVZ_data.PVZ_version == 3.151
         or PVZ_data.PVZ_version == 3.16
+        or PVZ_data.PVZ_version == 3.17
     ):
         if no == 1:
             PVZ_data.PVZ_memory.write_int(0x008D0F7F, hp)
@@ -8272,6 +8317,7 @@ def more_hero(f):
         or PVZ_data.PVZ_version == 3.14
         or PVZ_data.PVZ_version == 3.151
         or PVZ_data.PVZ_version == 3.16
+        or PVZ_data.PVZ_version == 3.17
     ):
         if f:
             newmem_more_hero = pymem.memory.allocate_memory(
@@ -8296,18 +8342,18 @@ def more_hero(f):
 
 def readTreeHeight():
     tree_hight_address = (
-        PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x82C
+        PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x82C
         )
         + 0xF4
     )
-    return PVZ_data.PVZ_memory.read_int(tree_hight_address)
+    return PVZ_data.PVZ_memory.read_uint(tree_hight_address)
 
 
 def setTreeHeight(height):
     tree_hight_address = (
-        PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x82C
+        PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x82C
         )
         + 0xF4
     )
@@ -8316,18 +8362,18 @@ def setTreeHeight(height):
 
 def readTreeFertilizer():
     tree_fertilizer_address = (
-        PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x82C
+        PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x82C
         )
         + 0x230
     )
-    return PVZ_data.PVZ_memory.read_int(tree_fertilizer_address) - 1000
+    return PVZ_data.PVZ_memory.read_uint(tree_fertilizer_address) - 1000
 
 
 def setTreeFertilizer(fertilizer):
     tree_fertilizer_address = (
-        PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x82C
+        PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x82C
         )
         + 0x230
     )
@@ -8336,18 +8382,18 @@ def setTreeFertilizer(fertilizer):
 
 def readGardenItemFertilizer():
     garden_item_fertilizer_address = (
-        PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x82C
+        PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x82C
         )
         + 0x1F8
     )
-    return PVZ_data.PVZ_memory.read_int(garden_item_fertilizer_address) - 1000
+    return PVZ_data.PVZ_memory.read_uint(garden_item_fertilizer_address) - 1000
 
 
 def setGardenItemFertilizer(fertilizer):
     garden_item_fertilizer_address = (
-        PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x82C
+        PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x82C
         )
         + 0x1F8
     )
@@ -8356,18 +8402,18 @@ def setGardenItemFertilizer(fertilizer):
 
 def readGardenItemPesticide():
     garden_item_pesticide_address = (
-        PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x82C
+        PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x82C
         )
         + 0x1FC
     )
-    return PVZ_data.PVZ_memory.read_int(garden_item_pesticide_address) - 1000
+    return PVZ_data.PVZ_memory.read_uint(garden_item_pesticide_address) - 1000
 
 
 def setGardenItemPesticide(pesticide):
     garden_item_pesticide_address = (
-        PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x82C
+        PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x82C
         )
         + 0x1FC
     )
@@ -8376,18 +8422,18 @@ def setGardenItemPesticide(pesticide):
 
 def readGardenItemChocolate():
     garden_item_chocolate_address = (
-        PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x82C
+        PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x82C
         )
         + 0x228
     )
-    return PVZ_data.PVZ_memory.read_int(garden_item_chocolate_address) - 1000
+    return PVZ_data.PVZ_memory.read_uint(garden_item_chocolate_address) - 1000
 
 
 def setGardenItemChocolate(chocolate):
     garden_item_chocolate_address = (
-        PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x82C
+        PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x82C
         )
         + 0x228
     )
@@ -8396,18 +8442,18 @@ def setGardenItemChocolate(chocolate):
 
 def getTotalPottedNum():
     total_potted_num_address = (
-        PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x82C
+        PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x82C
         )
         + 0x36C
     )
-    return PVZ_data.PVZ_memory.read_int(total_potted_num_address)
+    return PVZ_data.PVZ_memory.read_uint(total_potted_num_address)
 
 
 def setTotalPottedNum(num):
     total_potted_num_address = (
-        PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x82C
+        PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x82C
         )
         + 0x36C
     )
@@ -8602,22 +8648,22 @@ def easyAddPotted(type, color):
 
 
 def addPotted(type, state, garden, row, col, direct, color, water, water_max):
-    potted_num = PVZ_data.PVZ_memory.read_int(
-        PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x82C
+    potted_num = PVZ_data.PVZ_memory.read_uint(
+        PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x82C
         )
         + 0x350
     )
     PVZ_data.PVZ_memory.write_int(
-        PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x82C
+        PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x82C
         )
         + 0x350,
         potted_num + 1,
     )
     potted_addr = (
-        PVZ_data.PVZ_memory.read_int(
-            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x82C
+        PVZ_data.PVZ_memory.read_uint(
+            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x82C
         )
         + 0x30000
         + PVZ_data.potted_size * potted_num

@@ -1,4 +1,4 @@
-# ruff: noqa: F403,F405,E402,F541,E722
+﻿# ruff: noqa: F403,F405,E402,F541,E722
 # import PVZ_asm
 import PVZ_Hybrid as pvz
 import PVZ_data as PVZ_data
@@ -55,7 +55,7 @@ from PIL import Image, ImageTk
 import traceback
 
 Image.CUBIC = Image.BICUBIC
-current_version = "2"
+current_version = "2.73"
 version_url = "https://gitee.com/EFrostBlade/PVZHybrid_Editor/raw/main/version.txt"
 main_window = None
 PVZ_data.update_PVZ_memory(1)
@@ -214,7 +214,8 @@ def chooseGame():
 
     def openPVZ_memory(process1):
         try:
-            window_name = re.search(r"\{\{(.+?)\}\}", process1).group(1)
+            match = re.search(r"{{(.+?)}}", process1)
+            window_name = match.group(1) if match else process1
             if "v2.0" in window_name:
                 PVZ_data.update_PVZ_version(2.0)
                 main_window.title(
@@ -305,6 +306,14 @@ def chooseGame():
                 )
             elif "v3.0" in window_name:
                 PVZ_data.update_PVZ_version(3.0)
+                main_window.title(
+                    "杂交版多功能修改器  "
+                    + str(current_version)
+                    + "      游戏版本："
+                    + str(PVZ_data.PVZ_version)
+                )
+            elif "v3.17" in window_name:
+                PVZ_data.update_PVZ_version(3.17)
                 main_window.title(
                     "杂交版多功能修改器  "
                     + str(current_version)
@@ -484,6 +493,7 @@ def chooseGame():
             )
             PVZ_data.update_PVZ_pid(int(re.search(r"(\d+)", process1).group(1)))
         except:
+            traceback.print_exc()
             Messagebox.show_error(
                 "没有足够的权限，请确保游戏未以管理员身份运行",
                 title="注入进程失败",
@@ -581,6 +591,14 @@ def chooseGame():
                 )
             elif "v2.6" in win32gui.GetWindowText(hwnd):
                 PVZ_data.update_PVZ_version(2.6)
+                main_window.title(
+                    "杂交版多功能修改器  "
+                    + str(current_version)
+                    + "      游戏版本："
+                    + str(PVZ_data.PVZ_version)
+                )
+            elif "v3.17" in win32gui.GetWindowText(hwnd):
+                PVZ_data.update_PVZ_version(3.17)
                 main_window.title(
                     "杂交版多功能修改器  "
                     + str(current_version)
@@ -923,6 +941,9 @@ def support():
 
     text.pack()
     str1 = (
+        "b2.73\n"
+        "适配杂交版3.17\n"
+        "修复了游戏内存地址超过0x7FFFFFFF导致的无法使用问题"
         "b0.72\n"
         "适配杂交版3.16\n"
         "新增3.16版本植物索敌修复功能\n"
@@ -1730,7 +1751,7 @@ def mainWindow():
                 title="更新检测失败",
             )
         # 比较版本号
-        elif latest_version > current_version:
+        elif latest_version > current_version or latest_version == "0.74":
             # 如果发现新版本，提示用户
             open_update_window(latest_version)
     except Exception:
@@ -1845,6 +1866,14 @@ def mainWindow():
                 )
             elif "v3.0" in win32gui.GetWindowText(hwnd):
                 PVZ_data.update_PVZ_version(3.0)
+                main_window.title(
+                    "杂交版多功能修改器  "
+                    + str(current_version)
+                    + "      游戏版本："
+                    + str(PVZ_data.PVZ_version)
+                )
+            elif "v3.17" in win32gui.GetWindowText(hwnd):
+                PVZ_data.update_PVZ_version(3.17)
                 main_window.title(
                     "杂交版多功能修改器  "
                     + str(current_version)
@@ -3101,9 +3130,9 @@ def mainWindow():
         zombie_list.clear()
         zombie_list_box.delete(*zombie_list_box.get_children())
         try:
-            zombie_num = PVZ_data.PVZ_memory.read_int(
-                PVZ_data.PVZ_memory.read_int(
-                    PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x768
+            zombie_num = PVZ_data.PVZ_memory.read_uint(
+                PVZ_data.PVZ_memory.read_uint(
+                    PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x768
                 )
                 + 0xA0
             )
@@ -3113,9 +3142,9 @@ def mainWindow():
         j = 0
         while i < zombie_num:
             zombie_addresss = (
-                PVZ_data.PVZ_memory.read_int(
-                    PVZ_data.PVZ_memory.read_int(
-                        PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x768
+                PVZ_data.PVZ_memory.read_uint(
+                    PVZ_data.PVZ_memory.read_uint(
+                        PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x768
                     )
                     + 0x90
                 )
@@ -3935,7 +3964,7 @@ def mainWindow():
             label = ttk.Label(row, text=zombie_name, width=15, anchor=E)
             value = ttk.IntVar(row)
             entry = ttk.Entry(row, textvariable=value, width=8)
-            value.set(PVZ_data.PVZ_memory.read_int(address))  # 假设的读取血量函数
+            value.set(PVZ_data.PVZ_memory.read_uint(address))  # 假设的读取血量函数
             label.pack(side=LEFT, anchor=E)
             entry.pack(side=LEFT, expand=YES, fill=X)
             zombie_hp_values[zombie_name] = value
@@ -4070,9 +4099,9 @@ def mainWindow():
         plant_list.clear()
         plant_list_box.delete(*plant_list_box.get_children())
         try:
-            plant_num = PVZ_data.PVZ_memory.read_int(
-                PVZ_data.PVZ_memory.read_int(
-                    PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x768
+            plant_num = PVZ_data.PVZ_memory.read_uint(
+                PVZ_data.PVZ_memory.read_uint(
+                    PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x768
                 )
                 + 0xBC
             )
@@ -4082,9 +4111,9 @@ def mainWindow():
         j = 0
         while i < plant_num:
             plant_addresss = (
-                PVZ_data.PVZ_memory.read_int(
-                    PVZ_data.PVZ_memory.read_int(
-                        PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x768
+                PVZ_data.PVZ_memory.read_uint(
+                    PVZ_data.PVZ_memory.read_uint(
+                        PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x768
                     )
                     + 0xAC
                 )
@@ -4573,9 +4602,9 @@ def mainWindow():
 
     def clearPlants():
         try:
-            plant_num = PVZ_data.PVZ_memory.read_int(
-                PVZ_data.PVZ_memory.read_int(
-                    PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x768
+            plant_num = PVZ_data.PVZ_memory.read_uint(
+                PVZ_data.PVZ_memory.read_uint(
+                    PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x768
                 )
                 + 0xBC
             )
@@ -4585,9 +4614,9 @@ def mainWindow():
         j = 0
         while i < plant_num:
             plant_addresss = (
-                PVZ_data.PVZ_memory.read_int(
-                    PVZ_data.PVZ_memory.read_int(
-                        PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x768
+                PVZ_data.PVZ_memory.read_uint(
+                    PVZ_data.PVZ_memory.read_uint(
+                        PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x768
                     )
                     + 0xAC
                 )
@@ -5022,9 +5051,9 @@ def mainWindow():
         item_list.clear()
         item_list_box.delete(*item_list_box.get_children())
         try:
-            item_num = PVZ_data.PVZ_memory.read_int(
-                PVZ_data.PVZ_memory.read_int(
-                    PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x768
+            item_num = PVZ_data.PVZ_memory.read_uint(
+                PVZ_data.PVZ_memory.read_uint(
+                    PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x768
                 )
                 + 0x12C
             )
@@ -5034,9 +5063,9 @@ def mainWindow():
         j = 0
         while i < item_num:
             item_addresss = (
-                PVZ_data.PVZ_memory.read_int(
-                    PVZ_data.PVZ_memory.read_int(
-                        PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x768
+                PVZ_data.PVZ_memory.read_uint(
+                    PVZ_data.PVZ_memory.read_uint(
+                        PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x768
                     )
                     + 0x11C
                 )
@@ -5144,9 +5173,9 @@ def mainWindow():
 
     def clearLadders():
         try:
-            item_num = PVZ_data.PVZ_memory.read_int(
-                PVZ_data.PVZ_memory.read_int(
-                    PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x768
+            item_num = PVZ_data.PVZ_memory.read_uint(
+                PVZ_data.PVZ_memory.read_uint(
+                    PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x768
                 )
                 + 0x12C
             )
@@ -5156,9 +5185,9 @@ def mainWindow():
         j = 0
         while i < item_num:
             item_addresss = (
-                PVZ_data.PVZ_memory.read_int(
-                    PVZ_data.PVZ_memory.read_int(
-                        PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x768
+                PVZ_data.PVZ_memory.read_uint(
+                    PVZ_data.PVZ_memory.read_uint(
+                        PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x768
                     )
                     + 0x11C
                 )
@@ -5276,9 +5305,9 @@ def mainWindow():
         else:
             if start_car_combobox.current() == 6:
                 try:
-                    car_num = PVZ_data.PVZ_memory.read_int(
-                        PVZ_data.PVZ_memory.read_int(
-                            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x768
+                    car_num = PVZ_data.PVZ_memory.read_uint(
+                        PVZ_data.PVZ_memory.read_uint(
+                            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x768
                         )
                         + 0x110
                     )
@@ -5289,9 +5318,9 @@ def mainWindow():
                 start_car_list = [0] * rows
                 while i < car_num:
                     car_addresss = (
-                        PVZ_data.PVZ_memory.read_int(
-                            PVZ_data.PVZ_memory.read_int(
-                                PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress)
+                        PVZ_data.PVZ_memory.read_uint(
+                            PVZ_data.PVZ_memory.read_uint(
+                                PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress)
                                 + 0x768
                             )
                             + 0x100
@@ -5314,9 +5343,9 @@ def mainWindow():
                 return
             else:
                 try:
-                    car_num = PVZ_data.PVZ_memory.read_int(
-                        PVZ_data.PVZ_memory.read_int(
-                            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x768
+                    car_num = PVZ_data.PVZ_memory.read_uint(
+                        PVZ_data.PVZ_memory.read_uint(
+                            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x768
                         )
                         + 0x110
                     )
@@ -5326,9 +5355,9 @@ def mainWindow():
                 j = 0
                 while i < car_num:
                     car_addresss = (
-                        PVZ_data.PVZ_memory.read_int(
-                            PVZ_data.PVZ_memory.read_int(
-                                PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress)
+                        PVZ_data.PVZ_memory.read_uint(
+                            PVZ_data.PVZ_memory.read_uint(
+                                PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress)
                                 + 0x768
                             )
                             + 0x100
@@ -5375,9 +5404,9 @@ def mainWindow():
                 return
             pvz.recoveryCars()
             try:
-                car_num = PVZ_data.PVZ_memory.read_int(
-                    PVZ_data.PVZ_memory.read_int(
-                        PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x768
+                car_num = PVZ_data.PVZ_memory.read_uint(
+                    PVZ_data.PVZ_memory.read_uint(
+                        PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x768
                     )
                     + 0x110
                 )
@@ -5391,9 +5420,9 @@ def mainWindow():
                 delete_car_list[recover_car_combobox.current()] = 1
                 while i < car_num:
                     car_addresss = (
-                        PVZ_data.PVZ_memory.read_int(
-                            PVZ_data.PVZ_memory.read_int(
-                                PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress)
+                        PVZ_data.PVZ_memory.read_uint(
+                            PVZ_data.PVZ_memory.read_uint(
+                                PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress)
                                 + 0x768
                             )
                             + 0x100
@@ -5734,9 +5763,9 @@ def mainWindow():
                 plants_data[r][c].clear()
                 ladders_data[r][c] = 0
         try:
-            plant_num = PVZ_data.PVZ_memory.read_int(
-                PVZ_data.PVZ_memory.read_int(
-                    PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x768
+            plant_num = PVZ_data.PVZ_memory.read_uint(
+                PVZ_data.PVZ_memory.read_uint(
+                    PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x768
                 )
                 + 0xBC
             )
@@ -5746,9 +5775,9 @@ def mainWindow():
         j = 0
         while i < plant_num:
             plant_addresss = (
-                PVZ_data.PVZ_memory.read_int(
-                    PVZ_data.PVZ_memory.read_int(
-                        PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x768
+                PVZ_data.PVZ_memory.read_uint(
+                    PVZ_data.PVZ_memory.read_uint(
+                        PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x768
                     )
                     + 0xAC
                 )
@@ -5763,9 +5792,9 @@ def mainWindow():
                 i = i + 1
             j = j + 1
         try:
-            item_num = PVZ_data.PVZ_memory.read_int(
-                PVZ_data.PVZ_memory.read_int(
-                    PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x768
+            item_num = PVZ_data.PVZ_memory.read_uint(
+                PVZ_data.PVZ_memory.read_uint(
+                    PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x768
                 )
                 + 0x12C
             )
@@ -5775,9 +5804,9 @@ def mainWindow():
         j = 0
         while i < item_num:
             item_addresss = (
-                PVZ_data.PVZ_memory.read_int(
-                    PVZ_data.PVZ_memory.read_int(
-                        PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x768
+                PVZ_data.PVZ_memory.read_uint(
+                    PVZ_data.PVZ_memory.read_uint(
+                        PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x768
                     )
                     + 0x11C
                 )
@@ -5849,9 +5878,9 @@ def mainWindow():
         vase_list.clear()
         vase_list_box.delete(*vase_list_box.get_children())
         try:
-            vase_num = PVZ_data.PVZ_memory.read_int(
-                PVZ_data.PVZ_memory.read_int(
-                    PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x768
+            vase_num = PVZ_data.PVZ_memory.read_uint(
+                PVZ_data.PVZ_memory.read_uint(
+                    PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x768
                 )
                 + 0x12C
             )
@@ -5861,9 +5890,9 @@ def mainWindow():
         j = 0
         while i < vase_num:
             vase_addresss = (
-                PVZ_data.PVZ_memory.read_int(
-                    PVZ_data.PVZ_memory.read_int(
-                        PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x768
+                PVZ_data.PVZ_memory.read_uint(
+                    PVZ_data.PVZ_memory.read_uint(
+                        PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x768
                     )
                     + 0x11C
                 )
@@ -6799,10 +6828,10 @@ def mainWindow():
     def refresh_slot_list():
         slot_list.clear()
         try:
-            slot_num = PVZ_data.PVZ_memory.read_int(
-                PVZ_data.PVZ_memory.read_int(
-                    PVZ_data.PVZ_memory.read_int(
-                        PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x768
+            slot_num = PVZ_data.PVZ_memory.read_uint(
+                PVZ_data.PVZ_memory.read_uint(
+                    PVZ_data.PVZ_memory.read_uint(
+                        PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x768
                     )
                     + 0x144
                 )
@@ -6813,9 +6842,9 @@ def mainWindow():
         i = 0
         while i < slot_num:
             slot_addresss = (
-                PVZ_data.PVZ_memory.read_int(
-                    PVZ_data.PVZ_memory.read_int(
-                        PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x768
+                PVZ_data.PVZ_memory.read_uint(
+                    PVZ_data.PVZ_memory.read_uint(
+                        PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x768
                     )
                     + 0x144
                 )
@@ -6980,9 +7009,9 @@ def mainWindow():
 
     def setSlotsNum(event):
         PVZ_data.PVZ_memory.write_int(
-            PVZ_data.PVZ_memory.read_int(
-                PVZ_data.PVZ_memory.read_int(
-                    PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x768
+            PVZ_data.PVZ_memory.read_uint(
+                PVZ_data.PVZ_memory.read_uint(
+                    PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x768
                 )
                 + 0x144
             )
@@ -7182,9 +7211,9 @@ def mainWindow():
     def select_slots_config():
         card_list = [999] * 14
         try:
-            selected_num = PVZ_data.PVZ_memory.read_int(
-                PVZ_data.PVZ_memory.read_int(
-                    PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x774
+            selected_num = PVZ_data.PVZ_memory.read_uint(
+                PVZ_data.PVZ_memory.read_uint(
+                    PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x774
                 )
                 + 0xD24
             )
@@ -7200,9 +7229,9 @@ def mainWindow():
                 if i == 48:
                     i = i + 27
                 if (
-                    PVZ_data.PVZ_memory.read_int(
-                        PVZ_data.PVZ_memory.read_int(
-                            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x774
+                    PVZ_data.PVZ_memory.read_uint(
+                        PVZ_data.PVZ_memory.read_uint(
+                            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x774
                         )
                         + 0xC8
                         + 0x3C * i
@@ -7211,9 +7240,9 @@ def mainWindow():
                 ):
                     n = int(
                         (
-                            PVZ_data.PVZ_memory.read_int(
-                                PVZ_data.PVZ_memory.read_int(
-                                    PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress)
+                            PVZ_data.PVZ_memory.read_uint(
+                                PVZ_data.PVZ_memory.read_uint(
+                                    PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress)
                                     + 0x774
                                 )
                                 + 0xA4
@@ -7228,16 +7257,16 @@ def mainWindow():
                     j = j + 1
                 i = i + 1
         for c in slot_type_comboboxes:
-            selected_num = PVZ_data.PVZ_memory.read_int(
-                PVZ_data.PVZ_memory.read_int(
-                    PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x774
+            selected_num = PVZ_data.PVZ_memory.read_uint(
+                PVZ_data.PVZ_memory.read_uint(
+                    PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x774
                 )
                 + 0xD24
             )
-            limit_num = PVZ_data.PVZ_memory.read_int(
-                PVZ_data.PVZ_memory.read_int(
-                    PVZ_data.PVZ_memory.read_int(
-                        PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x768
+            limit_num = PVZ_data.PVZ_memory.read_uint(
+                PVZ_data.PVZ_memory.read_uint(
+                    PVZ_data.PVZ_memory.read_uint(
+                        PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x768
                     )
                     + 0x144
                 )
@@ -7274,9 +7303,9 @@ def mainWindow():
     def clear_slots():
         card_list = [999] * 14
         try:
-            selected_num = PVZ_data.PVZ_memory.read_int(
-                PVZ_data.PVZ_memory.read_int(
-                    PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x774
+            selected_num = PVZ_data.PVZ_memory.read_uint(
+                PVZ_data.PVZ_memory.read_uint(
+                    PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x774
                 )
                 + 0xD24
             )
@@ -7290,17 +7319,17 @@ def mainWindow():
                 if i == 48:
                     i = i + 27
                 if (
-                    PVZ_data.PVZ_memory.read_int(
-                        PVZ_data.PVZ_memory.read_int(
-                            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x774
+                    PVZ_data.PVZ_memory.read_uint(
+                        PVZ_data.PVZ_memory.read_uint(
+                            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x774
                         )
                         + 0xC8
                         + 0x3C * i
                     )
                     == 1
-                    or PVZ_data.PVZ_memory.read_int(
-                        PVZ_data.PVZ_memory.read_int(
-                            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x774
+                    or PVZ_data.PVZ_memory.read_uint(
+                        PVZ_data.PVZ_memory.read_uint(
+                            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x774
                         )
                         + 0xC8
                         + 0x3C * i
@@ -7309,9 +7338,9 @@ def mainWindow():
                 ):
                     n = int(
                         (
-                            PVZ_data.PVZ_memory.read_int(
-                                PVZ_data.PVZ_memory.read_int(
-                                    PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress)
+                            PVZ_data.PVZ_memory.read_uint(
+                                PVZ_data.PVZ_memory.read_uint(
+                                    PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress)
                                     + 0x774
                                 )
                                 + 0xA4
@@ -8091,16 +8120,6 @@ def mainWindow():
     )
     boss_correct_check.place(x=505, y=515, relx=0, anchor=NW)
 
-    fix_find_target_status = ttk.BooleanVar(common_page)
-    fix_find_target_check = ttk.Checkbutton(
-        common_page,
-        text="3.16植物\n索敌修复",
-        variable=fix_find_target_status,
-        bootstyle="danger-round-toggle",
-        command=lambda: pvz.find_target_fix(fix_find_target_status.get()),
-    )
-    fix_find_target_check.place(x=505, y=550, relx=0, anchor=NW)
-
     # 定义一个函数来更新slot的属性
     def get_slot_attribute():
         for index, slot in enumerate(slot_list):
@@ -8125,10 +8144,10 @@ def mainWindow():
                 pass
         try:
             slots_num_value.set(
-                PVZ_data.PVZ_memory.read_int(
-                    PVZ_data.PVZ_memory.read_int(
-                        PVZ_data.PVZ_memory.read_int(
-                            PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x768
+                PVZ_data.PVZ_memory.read_uint(
+                    PVZ_data.PVZ_memory.read_uint(
+                        PVZ_data.PVZ_memory.read_uint(
+                            PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x768
                         )
                         + 0x144
                     )
@@ -8163,9 +8182,9 @@ def mainWindow():
         potted_list.clear()
         potted_list_box.delete(*potted_list_box.get_children())
         try:
-            potted_num = PVZ_data.PVZ_memory.read_int(
-                PVZ_data.PVZ_memory.read_int(
-                    PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x82C
+            potted_num = PVZ_data.PVZ_memory.read_uint(
+                PVZ_data.PVZ_memory.read_uint(
+                    PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x82C
                 )
                 + 0x350
             )
@@ -8174,8 +8193,8 @@ def mainWindow():
         i = 0
         while i < potted_num:
             potted_addresss = (
-                PVZ_data.PVZ_memory.read_int(
-                    PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x82C
+                PVZ_data.PVZ_memory.read_uint(
+                    PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x82C
                 )
                 + 0x30000
                 + PVZ_data.potted_size * i
@@ -8558,9 +8577,9 @@ def mainWindow():
         potted_list_check = []
         potted_list_check.clear()
         try:
-            potted_num_check = PVZ_data.PVZ_memory.read_int(
-                PVZ_data.PVZ_memory.read_int(
-                    PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x82C
+            potted_num_check = PVZ_data.PVZ_memory.read_uint(
+                PVZ_data.PVZ_memory.read_uint(
+                    PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x82C
                 )
                 + 0x350
             )
@@ -8569,8 +8588,8 @@ def mainWindow():
         i = 0
         while i < potted_num_check:
             potted_addresss = (
-                PVZ_data.PVZ_memory.read_int(
-                    PVZ_data.PVZ_memory.read_int(PVZ_data.baseAddress) + 0x82C
+                PVZ_data.PVZ_memory.read_uint(
+                    PVZ_data.PVZ_memory.read_uint(PVZ_data.baseAddress) + 0x82C
                 )
                 + 0x30000
                 + PVZ_data.potted_size * i
@@ -9629,12 +9648,27 @@ def mainWindow():
     # 将提示放在窗口底部居中，使用红色粗体以提高可见性
     unsupported_label = ttk.Label(
         main_window,
-        text="不支持杂交重置版",
-        font=("黑体", 10, "bold"),
+        text="重制版修改器点这里",
+        font=(
+            "黑体",
+            10,
+            "bold",
+            "underline",
+        ),  # 建议加上 "underline" 下划线，看起来更像超链接
         bootstyle=("danger",),
+        cursor="hand2",  # 鼠标悬停时变成小手图标，提升交互体验
     )
     # 放置在底部中间，略微向上偏移与其他底部控件错开
     unsupported_label.place(relx=0.5, rely=1, y=-3, anchor="s")
+
+    # ----------------- 添加点击跳转逻辑 -----------------
+
+    # 定义点击事件的触发函数
+    def open_bilibili_link(event):
+        webbrowser.open("https://www.bilibili.com/video/BV1zGDyBSE1H")
+
+    # 将鼠标左键点击事件绑定到这个 Label 上
+    unsupported_label.bind("<Button-1>", open_bilibili_link)
 
     # def recruit():
     #     global main_window
